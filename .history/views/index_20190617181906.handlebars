@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta author="Michael Gentilini">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+  <link rel="stylesheet" type="text/css" href="/styles/styles.css">
+  <title>Welcome to Hot Load</title>
+</head>
+<style>
+</style>
+
+<body>
+
+  <div class="container">
+    <div class="card">
+      <ul class="nav nav-pills nav-fill">
+        <li class="nav-item">
+          <a class="nav-link active" href="#shipper" role="tab" data-toggle="tab">Shipper</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#carrier" role="tab" data-toggle="tab">Carrier</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#broker" role="tab" data-toggle="tab">Broker</a>
+        </li>
+
+        </nav>
+    </div>
+    </ul>
+  </div>
+
+  <div class="container">
+    <div class="tab-content">
+
+      <div role="tabpanel" class="tab-pane active" id="shipper">
+
+        <div class="card-header text-center mt-2">Shipper</div>
+        <form>
+          <div class="form-group row">
+            <label for="shipperBegin" class="col-sm-2 col-form-label">Shipper Beginning Address</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="shipperBegin" placeholder="Shipper Beginning Address">
+            </div>
+          </div>
+
+          <div class="form-group row mt-1">
+            <label for="shipperEnd" class="col-sm-2 col-form-label">Shipper Ending Address</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="shipperEnd" placeholder="Shipper Ending Address">
+            </div>
+          </div>
+          <div class="form-group row mt-1">
+            <label for="shipperPrice" class="col-sm-2 col-form-label">Compensation</label>
+            <div class="col-sm-10">
+              <input type="number" class="form-control" id="shipperPrice" placeholder="$350">
+            </div>
+          </div>
+
+          <fieldset class="form-group">
+
+            <div class="row">
+              <legend class="col-form-label col-sm-2 pt-0">Load Type</legend>
+              <div class="col-sm-10">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1">
+                  <label class="form-check-label" for="gridRadios1">
+                    Cars
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+                  <label class="form-check-label" for="gridRadios2">
+                    Livestock
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3">
+                  <label class="form-check-label" for="gridRadios3">
+                    Food
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios4" value="option4">
+                  <label class="form-check-label" for="gridRadios4">
+                    Household Goods
+                  </label>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <div class="form-group row">
+            <div class="col">
+              <button type="submit" id="shipperSubmit" class="btn btn-primary btn-block">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="carrier">
+        <div class="card-header text-center mt-2">Carrier</div>
+        <div class="form-group">
+          <label for="">carrier</label>
+          <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
+          <small class="form-text text-muted">Enter your address</small> </div>
+      </div>
+
+
+      <div role="tabpanel" class="tab-pane" id="broker">
+        <div class="card-header text-center mt-2">Broker</div>
+        <div class="form-group">
+          <label for="">broker</label>
+          <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
+          <small class="form-text text-muted">What do you want to move?</small>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{!-- <div id="home">
+    <div class="container">
+      <div class="row">
+        <div class="col-8 offset-2">
+          <h1>{{msg}}</h1>
+          <h2 class="text-center"><i class="fas fa-truck-loading"></i> <i class="fas fa-truck-moving"></i>&nbsp;Hot Load
+            !</h2>
+          <form class="clearfix mb-4" action="POST">
+            <div class="form-group">
+              <label for="example-text">Example Text</label>
+              <input type="text" id="example-text" class="form-control" aria-describedby="example-text"
+                placeholder="Enter Example Text">
+            </div>
+            <div class="form-group">
+              <label for="example-description">Example Description</label>
+              <textarea class="form-control" id="example-description" aria-describedby="example-description"
+                placeholder="Enter Example Description"></textarea>
+            </div>
+            <button id="submit" class="btn btn-primary float-right">Submit</button>
+          </form>
+          <h3>Examples:</h3>
+          <ul id="example-list" class="list-group">
+            {{#each examples}}
+            <li data-id="{{this.id}}" class="list-group-item">
+              <a href="example/{{this.id}}">{{this.text}}</a>
+              <button class="btn btn-danger float-right delete">ｘ</button>
+            </li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div> --}}
+</body>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script>
+  $('#shipper a').on('click', function (e) {
+    e.preventDefault()
+    $(this).tab('show')
+  })
+
+  $('#carrier a').on('click', function (e) {
+    e.preventDefault()
+    $(this).tab('show')
+  })
+
+  $('#broker a').on('click', function (e) {
+    e.preventDefault()
+    $(this).tab('show')
+  })
+</script>
