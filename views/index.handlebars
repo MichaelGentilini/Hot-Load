@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -7,13 +7,16 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta author="Michael Gentilini">
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
-  <link rel="stylesheet" type="text/css" href="/styles/styles.css">
-  <title>Welcome to Hot Load</title>
+  {{!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"> --}}
+{{!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"> --}}
+{{!-- <link rel="stylesheet" type="text/css" href="/styles/styles.css"> --}}
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script src="/js/index.js"></script>
+<title>Welcome to Hot Load</title>
 </head>
 <style>
-</style>
+</style> --}}
 
 <body>
 
@@ -240,54 +243,21 @@
         </div>
       </div>
 
+
+
+      {{!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> --}}
+
+      <script>
+        $('#shipper a').on('click', function (e) {
+          e.preventDefault()
+          $(this).tab('show')
+        });
+
+        $('#carrier a').on('click', function (e) {
+          e.preventDefault()
+          $(this).tab('show')
+        });
+
+
+      </script>
 </body>
-
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="/js/index.js"></script>
-<script>
-  $('#shipper a').on('click', function (e) {
-    e.preventDefault()
-    $(this).tab('show')
-  })
-
-  $('#carrier a').on('click', function (e) {
-    e.preventDefault()
-    $(this).tab('show')
-  })
-
-
-  $('#shipperSubmit').on('click', function (e) {
-    e.preventDefault()
-    console.log($('#shipperBegin').val())
-    console.log($('#shipperEnd').val())
-  })
-
-  $('#carrierSubmit').on('click', function (e) {
-    e.preventDefault()
-    var carBegin = $('#carrierBegin').val();
-    console.log($('#carrierBeginDistance').val())
-    console.log($('#carrierEnd').val())
-    console.log($('#carrierEndDistance').val())
-
-    getLatLng(carBegin);
-  })
-
-
-  function getLatLng(userAddress) {
-    axios
-      .get("https://maps.googleapis.com/maps/api/geocode/json", {
-        params: {
-          address: userAddress,
-          key: "AIzaSyA2Z73bHqtsEJuas82kslWAoAegg5Rxrco"
-        }
-      })
-      .then(function (response) {
-        var formattedAddress = response.data.results[0].formatted_address;
-        var newUserLat = response.data.results[0].geometry.location.lat;
-        var newUserLng = response.data.results[0].geometry.location.lng;
-
-        console.log(formattedAddress, newUserLat, newUserLng)
-      })
-
-  }
-</script>
