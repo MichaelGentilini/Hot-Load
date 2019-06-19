@@ -12,11 +12,13 @@ $("#shipperSubmit").on("click", function (e) {
 $("#carrierSubmit").on("click", function (e) {
   e.preventDefault();
   var carBegin = $("#carrierBegin").val();
-  console.log($("#carrierBeginDistance").val());
+  var carEnd = $("#carrierBeginDistance").val();
   console.log($("#carrierEnd").val());
   console.log($("#carrierEndDistance").val());
   console.log(carBegin);
+  console.log(carEnd);
   getLatLng(carBegin);
+  getLatLng(carEnd);
 });
 
 function getLatLng(userAddress) {
@@ -35,6 +37,23 @@ function getLatLng(userAddress) {
       console.log(formattedAddress, newUserLat, newUserLng);
     });
 }
+
+// ! Google Maps autocomplete Address
+function init() {
+  var shipBeginAuto = document.getElementById('shipperBegin');
+  var shipEndAuto = document.getElementById('shipperEnd');
+  var carBeginAuto = document.getElementById('carrierBegin');
+  var carEndAuto = document.getElementById('carrierEnd');
+  var autocomplete = new google.maps.places.Autocomplete(shipBeginAuto);
+  var autocomplete2 = new google.maps.places.Autocomplete(shipEndAuto);
+  var autocomplete3 = new google.maps.places.Autocomplete(carBeginAuto);
+  var autocomplete4 = new google.maps.places.Autocomplete(carEndAuto);
+}
+google.maps.event.addDomListener(window, 'load', init);
+
+
+
+
 
 // // Get references to page elements
 // var $exampleText = $("#example-text");
