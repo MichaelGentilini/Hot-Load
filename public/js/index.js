@@ -7,19 +7,21 @@ $("#shipperSubmit").on("click", function (e) {
   var shipEnd = $("#shipperEnd").val();
   getLatLng(shipBegin);
   getLatLng(shipEnd);
+
+  getDistance(shipBegin, shipEnd);
 });
 
 // ! Event Listener for Carrier Info
 $("#carrierSubmit").on("click", function (e) {
   e.preventDefault();
   var carBegin = $("#carrierBegin").val();
-  // var carEnd = $("#carrierBeginDistance").val();
   var carEnd = $("#carrierEnd").val();
-  console.log($("#carrierEndDistance").val());
-  console.log(carBegin);
-  console.log(carEnd);
+
   getLatLng(carBegin);
   getLatLng(carEnd);
+
+  // let's see if this works to get the distance.
+  getDistance(carBegin, carEnd);
 });
 
 // ! Google Maps autocomplete Address
@@ -53,6 +55,23 @@ function getLatLng(userAddress) {
       console.log(formattedAddress, newUserLat, newUserLng);
     });
 }
+
+//  ! Use this for Distance
+function getDistance(Add1, Add2) {
+  axios.get(`/api/distance/${Add1}/${Add2}`)
+    .then(function (response) {
+      console.log('Distance ', response.data.distance.text);
+
+      var distance = response.data.distance.text.split(' ')[0];
+      var duration = response.data.duration.text;
+
+      console.log(duration);
+
+      console.log(distance);
+
+    });
+}
+
 
 
 
