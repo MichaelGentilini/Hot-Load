@@ -1,19 +1,20 @@
-// var requirejs = require('../js/r.js');
-
-// var axios = require("axios");
-// var $ = require("jquery");
-
+// ! Event Listener for Shipper Info
 $("#shipperSubmit").on("click", function (e) {
   e.preventDefault();
   console.log($("#shipperBegin").val());
   console.log($("#shipperEnd").val());
+  var shipBegin = $("#shipperBegin").val();
+  var shipEnd = $("#shipperEnd").val();
+  getLatLng(shipBegin);
+  getLatLng(shipEnd);
 });
 
+// ! Event Listener for Carrier Info
 $("#carrierSubmit").on("click", function (e) {
   e.preventDefault();
   var carBegin = $("#carrierBegin").val();
-  var carEnd = $("#carrierBeginDistance").val();
-  console.log($("#carrierEnd").val());
+  // var carEnd = $("#carrierBeginDistance").val();
+  var carEnd = $("#carrierEnd").val();
   console.log($("#carrierEndDistance").val());
   console.log(carBegin);
   console.log(carEnd);
@@ -21,6 +22,21 @@ $("#carrierSubmit").on("click", function (e) {
   getLatLng(carEnd);
 });
 
+// ! Google Maps autocomplete Address
+function init() {
+  var shipBeginAuto = document.getElementById('shipperBegin');
+  var shipEndAuto = document.getElementById('shipperEnd');
+  var carBeginAuto = document.getElementById('carrierBegin');
+  var carEndAuto = document.getElementById('carrierEnd');
+  var autocomplete = new google.maps.places.Autocomplete(shipBeginAuto);
+  var autocomplete2 = new google.maps.places.Autocomplete(shipEndAuto);
+  var autocomplete3 = new google.maps.places.Autocomplete(carBeginAuto);
+  var autocomplete4 = new google.maps.places.Autocomplete(carEndAuto);
+}
+google.maps.event.addDomListener(window, 'load', init);
+
+
+//  ! Get geocode date from user input
 function getLatLng(userAddress) {
   axios
     .get("https://maps.googleapis.com/maps/api/geocode/json", {
@@ -37,20 +53,6 @@ function getLatLng(userAddress) {
       console.log(formattedAddress, newUserLat, newUserLng);
     });
 }
-
-// ! Google Maps autocomplete Address
-function init() {
-  var shipBeginAuto = document.getElementById('shipperBegin');
-  var shipEndAuto = document.getElementById('shipperEnd');
-  var carBeginAuto = document.getElementById('carrierBegin');
-  var carEndAuto = document.getElementById('carrierEnd');
-  var autocomplete = new google.maps.places.Autocomplete(shipBeginAuto);
-  var autocomplete2 = new google.maps.places.Autocomplete(shipEndAuto);
-  var autocomplete3 = new google.maps.places.Autocomplete(carBeginAuto);
-  var autocomplete4 = new google.maps.places.Autocomplete(carEndAuto);
-}
-google.maps.event.addDomListener(window, 'load', init);
-
 
 
 
