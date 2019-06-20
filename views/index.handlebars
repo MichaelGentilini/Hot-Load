@@ -32,13 +32,13 @@
           <div class="form-group row mt-1">
             <label for="shipperEnd" class="col-sm-2 col-form-label">Ending Address</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="shipperEnd" placeholder="123 Main Street, Dallas, TXs">
+              <input type="text" class="form-control" id="shipperEnd" placeholder="123 Main Street, Dallas, TX">
             </div>
           </div>
           <div class="form-group row mt-1">
             <label for="shipperPrice" class="col-sm-2 col-form-label">Compensation per Mile</label>
             <div class="col-sm-10">
-              <input type="number" class="form-control" id="shipperPrice" placeholder="$0.39">
+              <input type="number" class="form-control" id="shipperPrice" placeholder="$0.39" required>
             </div>
           </div>
 
@@ -107,8 +107,8 @@
           </div>
         </form>
 
-        <div class="card">
-          <div class="card-header">Map Goes Here</div>
+        <div class="card text-center">
+          <div class="card-header">Shipment information goes here or in a modal</div>
         </div>
 
       </div>
@@ -218,10 +218,6 @@
         </div>
       </div>
 
-
-
-      {{!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> --}}
-
       <script>
         $('#shipper a').on('click', function (e) {
           e.preventDefault()
@@ -232,7 +228,6 @@
           e.preventDefault()
           $(this).tab('show')
         });
-
 
       </script>
 </body>
