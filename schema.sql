@@ -1,0 +1,5 @@
+DROP DATABASE IF EXISTS hot_loads_db;
+CREATE DATABASE hot_loads_db;
+
+DROP DATABASE IF EXISTS testdb;
+CREATE DATABASE testdb;

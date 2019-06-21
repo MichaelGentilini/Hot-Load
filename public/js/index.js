@@ -4,22 +4,35 @@ $("#shipperSubmit").on("click", function (e) {
 
   var shipBegin = $("#shipperBegin").val();
   var shipEnd = $("#shipperEnd").val();
+
+  console.log(shipEnd);
   var shipPrice = $("#shipperPrice").val();
-  if ((shipBegin !== '') && (shipEnd !== '') & (shipPrice !== '')) {
-    // console.log(shipBegin !== ' ');
-    // console.log(shipEnd == '');
-    // console.log(shipPrice);
-    // console.log(shipPrice == '');
-    // console.log(shipPrice === '');
-    console.log('From:\t', $("#shipperBegin").val());
-    console.log('To: \t', $("#shipperEnd").val());
+  var shipItem = $("input[name='gridRadios']:checked").val();
+  var shipDetail = $("#shipperDetail").val();
+  console.log(shipItem);
+  console.log(shipDetail);
+
+  if (shipBegin !== "" && (shipEnd !== "") & (shipPrice !== "")) {
+    console.log("\n" + "From:\t", $("#shipperBegin").val());
+    console.log("To: \t", $("#shipperEnd").val());
     getLatLng(shipBegin);
     getLatLng(shipEnd);
 
     getDistance(shipBegin, shipEnd, shipPrice);
   } else {
-    console.log('please enter a begining address, ending address and compensation')
+    console.log(
+      "please enter a begining address, ending address and compensation"
+    );
   }
+
+
+  // begin: req.body.begin,
+  // end: req.body.end,
+  // item: req.body.item,
+  // details: req.body.details,
+  // price: req.body.price,
+  // miles: req.body.miles
+
 });
 
 // ! Event Listener for Carrier Info
@@ -36,16 +49,16 @@ $("#carrierSubmit").on("click", function (e) {
 
 // ! Google Maps autocomplete Address
 function init() {
-  var shipBeginAuto = document.getElementById('shipperBegin');
-  var shipEndAuto = document.getElementById('shipperEnd');
-  var carBeginAuto = document.getElementById('carrierBegin');
-  var carEndAuto = document.getElementById('carrierEnd');
+  var shipBeginAuto = document.getElementById("shipperBegin");
+  var shipEndAuto = document.getElementById("shipperEnd");
+  var carBeginAuto = document.getElementById("carrierBegin");
+  var carEndAuto = document.getElementById("carrierEnd");
   var autocomplete = new google.maps.places.Autocomplete(shipBeginAuto);
   var autocomplete2 = new google.maps.places.Autocomplete(shipEndAuto);
   var autocomplete3 = new google.maps.places.Autocomplete(carBeginAuto);
   var autocomplete4 = new google.maps.places.Autocomplete(carEndAuto);
 }
-google.maps.event.addDomListener(window, 'load', init);
+google.maps.event.addDomListener(window, "load", init);
 
 //  ! Get geocode date from user input
 function getLatLng(userAddress) {
@@ -53,47 +66,34 @@ function getLatLng(userAddress) {
     .get("https://maps.googleapis.com/maps/api/geocode/json", {
       params: {
         address: userAddress,
-        key: "AIzaSyA2Z73bHqtsEJuas82kslWAoAegg5Rxrco",
-      },
+        key: "AIzaSyA2Z73bHqtsEJuas82kslWAoAegg5Rxrco"
+      }
     })
     .then(function (response) {
       var formattedAddress = response.data.results[0].formatted_address;
       var newUserLat = response.data.results[0].geometry.location.lat;
       var newUserLng = response.data.results[0].geometry.location.lng;
-
       // console.log(formattedAddress, newUserLat, newUserLng);
     });
 }
 
 //  ! Use this for Distance
 function getDistance(Add1, Add2, shipPrice) {
-  axios.get(`/api/distance/${Add1}/${Add2}`)
-    .then(function (response) {
+  axios.get(`/api/distance/${Add1}/${Add2}`).then(function (response) {
+    var duration = response.data.duration.text;
 
-      var duration = response.data.duration.text;
+    console.log("Distance ", response.data.distance.text);
+    console.log("Approximate time", duration);
+    var distance = response.data.distance.text.split(" ")[0].replace(/\,/g, "");
 
-      console.log('Distance ', response.data.distance.text);
-      console.log('Approximate time', duration);
-
-      var distance = response.data.distance.text.split(' ')[0].replace(/\,/g, '');
-
-
-
-
-      console.log('Rate', shipPrice);
+    if (shipPrice) {
+      console.log("Rate $" + parseFloat(shipPrice).toFixed(2) + " per mile");
       var finalCost = parseFloat(distance) * shipPrice;
       // console.log(finalCost);
-      console.log('Total Cost = $' + finalCost.toFixed(2));
-      // } else {
-      //   console.log('please enter all the necessary information');
-      // }
-    });
+      console.log("Total Cost = $" + finalCost.toFixed(2));
+    }
+  });
 }
-
-
-
-
-
 // // Get references to page elements
 // var $exampleText = $("#example-text");
 // var $exampleDescription = $("#example-description");
@@ -192,4 +192,4 @@ function getDistance(Add1, Add2, shipPrice) {
 
 // // Add event listeners to the submit and delete buttons
 // $submitBtn.on("click", handleFormSubmit);
-// $exampleList.on("click", ".delete", handleDeleteBtnClick);
+// $exampleList.on("click", ".delete", handleDeleteBtnClick)

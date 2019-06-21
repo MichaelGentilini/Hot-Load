@@ -1,8 +1,9 @@
 var db = require("../models");
 var axios = require("axios");
 
+// ! Get request for distances from Google
 module.exports = function (app) {
-  // Get all examples
+  // Get all shipments
   app.get("/api/distance/:from/:to", function (req, res) {
     var from = req.params.from;
     var to = req.params.to;
@@ -13,29 +14,64 @@ module.exports = function (app) {
     });
   });
 
-  app.get("/api/examples", function (req, res) {
-    db.Example.findAll({}).then(function (dbExamples) {
-      res.json(dbExamples);
+  // // todo Display all shipments
+  // app.get("/api/shipments", function (req, res) {
+  //   db.Shipment.findAll({}).then(function (dbShipment) {
+  //     res.json(dbShipment);
+  //   });
+  // });
+
+  // todo  Search a shipment by id
+  app.get("/api/shipments/:id", function (req, res) {
+    var id = req.params.id;
+    db.Shipment.findOne({
+      where: {
+        id
+      }
+    }).then(function (dbShipment) {
+      res.json(dbShipment);
     });
   });
 
-  // Create a new example
-  app.post("/api/examples", function (req, res) {
-    db.Example.create(req.body).then(function (dbExample) {
-      res.json(dbExample);
-    });
+  // ! Create a new shipment
+  app.post("/api/shipments", function (req, res) {
+    console.log(req.body);
+    db.Shipment.create({
+        begin: req.body.begin,
+        end: req.body.end,
+        item: req.body.item,
+        details: req.body.details,
+        price: req.body.price,
+        miles: req.body.miles
+      })
+      .then(function (dbShipment) {
+        console.log(dbShipment);
+        res.json(dbShipment);
+      });
   });
 
-  // Delete an example by id
-  app.delete("/api/examples/:id", function (req, res) {
-    db.Example.destroy({
+  // todo Delete an Shipment by id
+  app.delete("/api/shipments/:id", function (req, res) {
+    db.Shipment.destroy({
       where: {
         id: req.params.id
       }
     }).then(function (
-      dbExample
+      dbShipment
     ) {
-      res.json(dbExample);
+      res.json(dbShipment);
     });
+  });
+
+  // todo Modify an existing shipment
+  app.put("/api/shipments", function (req, res) {
+    db.Shipment.update(req.body, {
+        where: {
+          id: req.body.id
+        }
+      })
+      .then(function (dbShipment) {
+        res.json(dbShipment);
+      });
   });
 };

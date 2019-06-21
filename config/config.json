@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": "password",
-    "database": "exampledb",
+    "database": "hot_loads_db",
     "host": "localhost",
     "dialect": "mysql"
   },
