@@ -6,7 +6,7 @@ module.exports = function (sequelize, Datatypes) {
     end: Datatypes.STRING,
     item: Datatypes.STRING,
     details: Datatypes.TEXT,
-    price: Datatypes.DECIMAL(2),
+    price: Datatypes.FLOAT,
     miles: Datatypes.INTEGER,
     available: Datatypes.BOOLEAN
   });

@@ -4,7 +4,10 @@
     "password": "password",
     "database": "hot_loads_db",
     "host": "localhost",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "dialectOptions": {
+      "decimalNumbers": true
+    }
   },
   "test": {
     "username": "root",

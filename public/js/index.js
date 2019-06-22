@@ -22,6 +22,7 @@ $("#shipperSubmit").on("click", function (e) {
 
 
   if (shipBegin !== "" && (shipEnd !== "") & (shipPrice !== "")) {
+    shipPrice = parseFloat(shipPrice).toFixed(2);
     console.log("\n" + "From:\t\t", $("#shipperBegin").val());
     console.log("To: \t\t", $("#shipperEnd").val());
     getLatLng(shipBegin);
@@ -45,8 +46,6 @@ $("#shipperSubmit").on("click", function (e) {
   // todo we need to catch anything that doesn't work like an out of country address or invalid data
 
   function createShipment(distance) {
-
-    // shipPrice = parseFloat(shipPrice).toFixed(2);
 
     addShipment({
       begin: shipBegin,
@@ -122,9 +121,9 @@ function getDistance(Add1, Add2, shipPrice, createShipment) {
 
     var distance = response.data.distance.text.split(" ")[0].replace(/\,/g, "");
 
-    distance = distance * 1;
     if (shipPrice) {
-      console.log("Rate \t\t $" + parseInt(shipPrice).toFixed(2) + " per mile");
+
+      console.log("Rate \t\t $" + shipPrice + " per mile");
       var finalCost = parseFloat(distance).toFixed(2) * shipPrice;
       console.log("Total Cost \t $" + finalCost.toFixed(2));
     }
