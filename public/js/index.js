@@ -8,8 +8,28 @@ $("#viewShipments").on("click", function () {
   });
 });
 
-// ! Event Listener for Shipper Info
+// clear data function 1
 
+var presetValue = "car";
+var presetValue2 = "car";
+
+function clearShipmentData() {
+  $("#shipperBegin").val(null),
+    $("#shipperEnd").val(null),
+    $("#shipperPrice").val(null),
+    $("input[name='gridRadios']").filter("[value='" + presetValue + "']").prop("checked", true),
+    $("#shipperDetail").val(null);
+
+};
+
+function clearCarrierData() {
+  $("#carrierBegin").val(null),
+    $("#carrierBeginDistance").val(null),
+    $("input[name='Radios']").filter("[value='" + presetValue2 + "']").prop("checked", true),
+    $("#MinCarrierPrice").val(null)
+};
+
+// ! Event Listener for Shipper Info
 $("#shipperSubmit").on("click", function (e) {
   e.preventDefault();
 
@@ -19,14 +39,12 @@ $("#shipperSubmit").on("click", function (e) {
   var shipItem = $("input[name='gridRadios']:checked").val();
   var shipDetail = $("#shipperDetail").val();
 
-
-
   if (shipBegin !== "" && (shipEnd !== "") & (shipPrice !== "")) {
     shipPrice = parseFloat(shipPrice).toFixed(2);
     console.log("\n" + "From:\t\t", $("#shipperBegin").val());
     console.log("To: \t\t", $("#shipperEnd").val());
-    getLatLng(shipBegin);
-    getLatLng(shipEnd);
+    // getLatLng(shipBegin);
+    // getLatLng(shipEnd);
     console.log("Shipping \t", shipItem);
     if (shipDetail !== "") {
       console.log("Details \t", shipDetail);
@@ -34,13 +52,12 @@ $("#shipperSubmit").on("click", function (e) {
       console.log("Details \t", "No details provided");
     }
     getDistance(shipBegin, shipEnd, shipPrice, createShipment);
-
-    // todo create/call a function to clear everything here
-
+    // create/call a function to clear everything here
+    clearShipmentData();
   } else {
     console.log(
-      "please enter a begining address, ending address and compensation"
-    );
+      "please enter a begining address, ending address and compensation");
+    // clearShipmentData();
   }
 
   // todo we need to catch anything that doesn't work like an out of country address or invalid data
@@ -56,7 +73,6 @@ $("#shipperSubmit").on("click", function (e) {
       miles: distance,
       available: true
     });
-
   }
 });
 
@@ -71,12 +87,14 @@ function addShipment(shipmentObj) {
 $("#carrierSubmit").on("click", function (e) {
   e.preventDefault();
   var carBegin = $("#carrierBegin").val();
-  var carEnd = $("#carrierEnd").val();
+  var carBeginDistance = $("#carrierBeginDistance").val();
+  var carPrice = $("#MinCarrierPrice").val();
+  console.log(carBegin);
+  console.log(carBeginDistance);
+  console.log(carPrice);
 
-  // getLatLng(carBegin);
-  // getLatLng(carEnd);
-
-  getDistance(carBegin, carEnd);
+  getLatLng(carBegin);
+  clearCarrierData();
 });
 
 // ! Google Maps autocomplete Address
@@ -84,11 +102,11 @@ function init() {
   var shipBeginAuto = document.getElementById("shipperBegin");
   var shipEndAuto = document.getElementById("shipperEnd");
   var carBeginAuto = document.getElementById("carrierBegin");
-  var carEndAuto = document.getElementById("carrierEnd");
+  // var carEndAuto = document.getElementById("carrierEnd");
   var autocomplete = new google.maps.places.Autocomplete(shipBeginAuto);
   var autocomplete2 = new google.maps.places.Autocomplete(shipEndAuto);
   var autocomplete3 = new google.maps.places.Autocomplete(carBeginAuto);
-  var autocomplete4 = new google.maps.places.Autocomplete(carEndAuto);
+  // var autocomplete4 = new google.maps.places.Autocomplete(carEndAuto);
 }
 google.maps.event.addDomListener(window, "load", init);
 
@@ -108,7 +126,7 @@ function getLatLng(userAddress) {
       var formattedAddress = res.formatted_address;
       var newUserLat = res.geometry.location.lat;
       var newUserLng = res.geometry.location.lng;
-      // console.table(formattedAddress, newUserLat, newUserLng);
+      console.table(formattedAddress, newUserLat, newUserLng);
     });
 }
 

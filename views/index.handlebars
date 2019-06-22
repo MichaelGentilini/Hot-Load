@@ -114,7 +114,7 @@
           <ul>
             {{#each shipments}}
             {{#if available}}
-            {{shipments}}
+            <p>{{shipments}}</p>
             {{/if}}
             {{/each}}
           </ul>
@@ -140,13 +140,14 @@
           </div>
 
           <div class="form-group row">
-            <label for="carrierBeginDistance" class="col-sm-2 col-form-label">Maximum Distance</label>
+            <label for="carrierBeginDistance" class="col-sm-2 col-form-label">Minimum Distance</label>
             <div class="col-sm-10">
               <input type="number" class="form-control" id="carrierBeginDistance" placeholder="100">
             </div>
           </div>
 
-          <div class="form-group row mt-1">
+          {{!-- ? not using this right now --}}
+          {{!-- <div class="form-group row mt-1">
             <label for="carrierEnd" class="col-sm-2 col-form-label">Ending Address</label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="carrierEnd" placeholder="123 Main Street, Dallas, TX">
@@ -158,8 +159,7 @@
             <div class="col-sm-10">
               <input type="number" class="form-control" id="carrierEndDistance" placeholder="100">
             </div>
-          </div>
-
+          </div> --}}
 
           <div class="form-group row mt-1">
             <label for="MinCarrierPrice" class="col-sm-2 col-form-label">Minimum Compensation per Mile</label>
@@ -175,43 +175,43 @@
               <div class="col-sm-10">
 
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1">
-                  <label class="form-check-label" for="gridRadios1">
+                  <input class="form-check-input" type="radio" name="Radios" id="Radios1" value="option1" checked>
+                  <label class="form-check-label" for="Radios1">
                     Car
                   </label>
                 </div>
 
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
-                  <label class="form-check-label" for="gridRadios2">
+                  <input class="form-check-input" type="radio" name="Radios" id="Radios2" value="option2">
+                  <label class="form-check-label" for="Radios2">
                     Truck
                   </label>
                 </div>
 
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3">
-                  <label class="form-check-label" for="gridRadios3">
+                  <input class="form-check-input" type="radio" name="Radios" id="Radios3" value="option3">
+                  <label class="form-check-label" for="Radios3">
                     Motorcycle/ATV
                   </label>
                 </div>
 
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios4" value="option4">
-                  <label class="form-check-label" for="gridRadios4">
+                  <input class="form-check-input" type="radio" name="Radios" id="Radios4" value="option4">
+                  <label class="form-check-label" for="Radios4">
                     Boat
                   </label>
                 </div>
 
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios5" value="option5">
-                  <label class="form-check-label" for="gridRadios5">
+                  <input class="form-check-input" type="radio" name="Radios" id="Radios5" value="option5">
+                  <label class="form-check-label" for="Radios5">
                     Camper
                   </label>
                 </div>
 
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios6" value="option6">
-                  <label class="form-check-label" for="gridRadios6">
+                  <input class="form-check-input" type="radio" name="Radios" id="Radios6" value="option6">
+                  <label class="form-check-label" for="Radios6">
                     Other
                   </label>
                 </div>
