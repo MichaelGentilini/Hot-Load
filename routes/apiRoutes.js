@@ -45,7 +45,8 @@ module.exports = function (app) {
         item: req.body.item,
         details: req.body.details,
         price: req.body.price,
-        miles: req.body.miles
+        miles: req.body.miles,
+        available: true
       })
       .then(function (dbShipment) {
         console.log('Shipment added to database');

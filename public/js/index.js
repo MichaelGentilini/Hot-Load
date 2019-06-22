@@ -4,10 +4,12 @@ $("#viewShipments").on("click", function () {
     console.table(data);
 
     // todo find a way to display the data for the user
+
   });
 });
 
 // ! Event Listener for Shipper Info
+
 $("#shipperSubmit").on("click", function (e) {
   e.preventDefault();
 
@@ -16,6 +18,8 @@ $("#shipperSubmit").on("click", function (e) {
   var shipPrice = $("#shipperPrice").val();
   var shipItem = $("input[name='gridRadios']:checked").val();
   var shipDetail = $("#shipperDetail").val();
+
+
 
   if (shipBegin !== "" && (shipEnd !== "") & (shipPrice !== "")) {
     console.log("\n" + "From:\t\t", $("#shipperBegin").val());
@@ -29,7 +33,9 @@ $("#shipperSubmit").on("click", function (e) {
       console.log("Details \t", "No details provided");
     }
     getDistance(shipBegin, shipEnd, shipPrice, createShipment);
+
     // todo create/call a function to clear everything here
+
   } else {
     console.log(
       "please enter a begining address, ending address and compensation"
@@ -39,23 +45,26 @@ $("#shipperSubmit").on("click", function (e) {
   // todo we need to catch anything that doesn't work like an out of country address or invalid data
 
   function createShipment(distance) {
-    shipPrice = parseFloat(shipPrice).toFixed(2);
+
+    // shipPrice = parseFloat(shipPrice).toFixed(2);
+
     addShipment({
       begin: shipBegin,
       end: shipEnd,
       item: shipItem,
       details: shipDetail,
-      price: shipPrice * 1,
-      miles: distance
+      price: shipPrice,
+      miles: distance,
+      available: true
     });
-    console.log('Your shipment has been added');
+
   }
 });
 
 function addShipment(shipmentObj) {
   $.post("/api/shipments", shipmentObj)
     .then(
-      console.log('shipment added')
+      console.log('Your shipment has been added')
     );
 }
 
@@ -113,7 +122,7 @@ function getDistance(Add1, Add2, shipPrice, createShipment) {
 
     var distance = response.data.distance.text.split(" ")[0].replace(/\,/g, "");
 
-    // distance = ;
+    distance = distance * 1;
     if (shipPrice) {
       console.log("Rate \t\t $" + parseInt(shipPrice).toFixed(2) + " per mile");
       var finalCost = parseFloat(distance).toFixed(2) * shipPrice;
@@ -124,6 +133,7 @@ function getDistance(Add1, Add2, shipPrice, createShipment) {
     createShipment(distance);
   });
 }
+
 // // Get references to page elements
 // var $exampleText = $("#example-text");
 // var $exampleDescription = $("#example-description");

@@ -7,7 +7,8 @@ module.exports = function (sequelize, Datatypes) {
     item: Datatypes.STRING,
     details: Datatypes.TEXT,
     price: Datatypes.DECIMAL(2),
-    miles: Datatypes.INTEGER
+    miles: Datatypes.INTEGER,
+    available: Datatypes.BOOLEAN
   });
   return Shipment;
 };
