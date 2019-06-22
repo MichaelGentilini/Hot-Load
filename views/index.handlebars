@@ -113,11 +113,15 @@
         </div>
 
       </div>
-
       {{!-- Carrier Info --}}
 
       <div role="tabpanel" class="tab-pane" id="carrier">
         <div class="card-header text-center mt-2">Carrier</div>
+
+        <div class="view-options mb-2 mt-3">
+          <button type="button" id="viewShipments" class="btn btn-success btn-block">View Available Loads</button>
+          <hr>
+        </div>
 
         <form>
           <div class="form-group row">
@@ -214,6 +218,7 @@
             </div>
           </div>
         </form>
+
         <div class="card">
           <div class="card-header">Map Goes Here</div>
         </div>
@@ -229,6 +234,5 @@
           e.preventDefault()
           $(this).tab('show')
         });
-
       </script>
 </body>

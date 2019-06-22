@@ -1,39 +1,63 @@
+// ! view all Shipments
+$("#viewShipments").on("click", function () {
+  $.get("/api/shipments", function (data) {
+    console.table(data);
+
+    // todo find a way to display the data for the user
+  });
+});
+
 // ! Event Listener for Shipper Info
 $("#shipperSubmit").on("click", function (e) {
   e.preventDefault();
 
   var shipBegin = $("#shipperBegin").val();
   var shipEnd = $("#shipperEnd").val();
-
-  console.log(shipEnd);
   var shipPrice = $("#shipperPrice").val();
   var shipItem = $("input[name='gridRadios']:checked").val();
   var shipDetail = $("#shipperDetail").val();
-  console.log(shipItem);
-  console.log(shipDetail);
 
   if (shipBegin !== "" && (shipEnd !== "") & (shipPrice !== "")) {
-    console.log("\n" + "From:\t", $("#shipperBegin").val());
-    console.log("To: \t", $("#shipperEnd").val());
+    console.log("\n" + "From:\t\t", $("#shipperBegin").val());
+    console.log("To: \t\t", $("#shipperEnd").val());
     getLatLng(shipBegin);
     getLatLng(shipEnd);
-
-    getDistance(shipBegin, shipEnd, shipPrice);
+    console.log("Shipping \t", shipItem);
+    if (shipDetail !== "") {
+      console.log("Details \t", shipDetail);
+    } else {
+      console.log("Details \t", "No details provided");
+    }
+    getDistance(shipBegin, shipEnd, shipPrice, createShipment);
+    // todo create/call a function to clear everything here
   } else {
     console.log(
       "please enter a begining address, ending address and compensation"
     );
   }
 
+  // todo we need to catch anything that doesn't work like an out of country address or invalid data
 
-  // begin: req.body.begin,
-  // end: req.body.end,
-  // item: req.body.item,
-  // details: req.body.details,
-  // price: req.body.price,
-  // miles: req.body.miles
-
+  function createShipment(distance) {
+    shipPrice = parseFloat(shipPrice).toFixed(2);
+    addShipment({
+      begin: shipBegin,
+      end: shipEnd,
+      item: shipItem,
+      details: shipDetail,
+      price: shipPrice * 1,
+      miles: distance
+    });
+    console.log('Your shipment has been added');
+  }
 });
+
+function addShipment(shipmentObj) {
+  $.post("/api/shipments", shipmentObj)
+    .then(
+      console.log('shipment added')
+    );
+}
 
 // ! Event Listener for Carrier Info
 $("#carrierSubmit").on("click", function (e) {
@@ -41,8 +65,8 @@ $("#carrierSubmit").on("click", function (e) {
   var carBegin = $("#carrierBegin").val();
   var carEnd = $("#carrierEnd").val();
 
-  getLatLng(carBegin);
-  getLatLng(carEnd);
+  // getLatLng(carBegin);
+  // getLatLng(carEnd);
 
   getDistance(carBegin, carEnd);
 });
@@ -60,7 +84,9 @@ function init() {
 }
 google.maps.event.addDomListener(window, "load", init);
 
-//  ! Get geocode date from user input
+
+//  ! Get geocode data from user input 
+// ? we don't need this for basic functionality right now, but if we want to add search by state, zip, etc this will make it much easier 
 function getLatLng(userAddress) {
   axios
     .get("https://maps.googleapis.com/maps/api/geocode/json", {
@@ -70,28 +96,32 @@ function getLatLng(userAddress) {
       }
     })
     .then(function (response) {
-      var formattedAddress = response.data.results[0].formatted_address;
-      var newUserLat = response.data.results[0].geometry.location.lat;
-      var newUserLng = response.data.results[0].geometry.location.lng;
-      // console.log(formattedAddress, newUserLat, newUserLng);
+      res = response.data.results[0];
+      var formattedAddress = res.formatted_address;
+      var newUserLat = res.geometry.location.lat;
+      var newUserLng = res.geometry.location.lng;
+      // console.table(formattedAddress, newUserLat, newUserLng);
     });
 }
 
 //  ! Use this for Distance
-function getDistance(Add1, Add2, shipPrice) {
+function getDistance(Add1, Add2, shipPrice, createShipment) {
   axios.get(`/api/distance/${Add1}/${Add2}`).then(function (response) {
     var duration = response.data.duration.text;
+    console.log("Est. Time\t", duration);
+    console.log("Distance \t", response.data.distance.text);
 
-    console.log("Distance ", response.data.distance.text);
-    console.log("Approximate time", duration);
     var distance = response.data.distance.text.split(" ")[0].replace(/\,/g, "");
 
+    // distance = ;
     if (shipPrice) {
-      console.log("Rate $" + parseFloat(shipPrice).toFixed(2) + " per mile");
-      var finalCost = parseFloat(distance) * shipPrice;
-      // console.log(finalCost);
-      console.log("Total Cost = $" + finalCost.toFixed(2));
+      console.log("Rate \t\t $" + parseInt(shipPrice).toFixed(2) + " per mile");
+      var finalCost = parseFloat(distance).toFixed(2) * shipPrice;
+      console.log("Total Cost \t $" + finalCost.toFixed(2));
     }
+    // todo figure out how to get distance to post to sequelize as a number and not a string
+
+    createShipment(distance);
   });
 }
 // // Get references to page elements

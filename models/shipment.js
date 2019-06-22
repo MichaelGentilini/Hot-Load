@@ -6,16 +6,8 @@ module.exports = function (sequelize, Datatypes) {
     end: Datatypes.STRING,
     item: Datatypes.STRING,
     details: Datatypes.TEXT,
-    price: Datatypes.DECIMAL,
+    price: Datatypes.DECIMAL(2),
     miles: Datatypes.INTEGER
   });
   return Shipment;
 };
-
-// module.exports = function (sequelize, DataTypes) {
-//   var Example = sequelize.define("Example", {
-//     text: DataTypes.STRING,
-//     description: DataTypes.TEXT
-//   });
-//   return Example;
-// };
