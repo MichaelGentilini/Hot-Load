@@ -2,14 +2,19 @@
 $("#viewShipments").on("click", function () {
   $.get("/api/shipments", function (data) {
     console.table(data);
+  });
 
-    // todo find a way to display the data for the user
+  // todo  Search a shipment by id
+
+  $.get("/api/shipments/" + 1, function (data) {
+    console.table(data);
 
   });
 });
 
-// clear data function 1
+// todo find a way to display the data for the user
 
+// ! clear data function 
 var presetValue = "car";
 var presetValue2 = "car";
 
@@ -19,7 +24,6 @@ function clearShipmentData() {
     $("#shipperPrice").val(null),
     $("input[name='gridRadios']").filter("[value='" + presetValue + "']").prop("checked", true),
     $("#shipperDetail").val(null);
-
 };
 
 function clearCarrierData() {
@@ -32,18 +36,32 @@ function clearCarrierData() {
 // ! Event Listener for Shipper Info
 $("#shipperSubmit").on("click", function (e) {
   e.preventDefault();
-
+  var city = "Dallas";
   var shipBegin = $("#shipperBegin").val();
   var shipEnd = $("#shipperEnd").val();
   var shipPrice = $("#shipperPrice").val();
   var shipItem = $("input[name='gridRadios']:checked").val();
   var shipDetail = $("#shipperDetail").val();
+  var shipBegin2 = [];
+
+  shipBegin2 = shipBegin.split(', ');
+
+  for (key in shipBegin2) {
+    var city = shipBegin2.length - 3;
+    // key = parseInt(key);
+    if (+key === city) {
+      console.log(shipBegin2[key]);
+      var beginCity = shipBegin2[key];
+    }
+  }
+
 
   if (shipBegin !== "" && (shipEnd !== "") & (shipPrice !== "")) {
     shipPrice = parseFloat(shipPrice).toFixed(2);
     console.log("\n" + "From:\t\t", $("#shipperBegin").val());
     console.log("To: \t\t", $("#shipperEnd").val());
-    // getLatLng(shipBegin);
+    console.log(beginCity);
+    getLatLng(shipBegin);
     // getLatLng(shipEnd);
     console.log("Shipping \t", shipItem);
     if (shipDetail !== "") {
@@ -57,7 +75,7 @@ $("#shipperSubmit").on("click", function (e) {
   } else {
     console.log(
       "please enter a begining address, ending address and compensation");
-    // clearShipmentData();
+    clearShipmentData();
   }
 
   // todo we need to catch anything that doesn't work like an out of country address or invalid data
@@ -66,6 +84,7 @@ $("#shipperSubmit").on("click", function (e) {
 
     addShipment({
       begin: shipBegin,
+      beginCity: city,
       end: shipEnd,
       item: shipItem,
       details: shipDetail,
@@ -102,11 +121,9 @@ function init() {
   var shipBeginAuto = document.getElementById("shipperBegin");
   var shipEndAuto = document.getElementById("shipperEnd");
   var carBeginAuto = document.getElementById("carrierBegin");
-  // var carEndAuto = document.getElementById("carrierEnd");
   var autocomplete = new google.maps.places.Autocomplete(shipBeginAuto);
   var autocomplete2 = new google.maps.places.Autocomplete(shipEndAuto);
   var autocomplete3 = new google.maps.places.Autocomplete(carBeginAuto);
-  // var autocomplete4 = new google.maps.places.Autocomplete(carEndAuto);
 }
 google.maps.event.addDomListener(window, "load", init);
 

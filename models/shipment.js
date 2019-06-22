@@ -3,6 +3,7 @@ module.exports = function (sequelize, Datatypes) {
   var Shipment = sequelize.define("shipment", {
     //  ! Here are the columns of the table
     begin: Datatypes.STRING,
+    beginCity: Datatypes.STRING,
     end: Datatypes.STRING,
     item: Datatypes.STRING,
     details: Datatypes.TEXT,
