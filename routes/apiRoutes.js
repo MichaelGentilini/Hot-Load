@@ -24,8 +24,20 @@ module.exports = function (app) {
     });
   });
 
+  // todo  Search for shipments by city
+  app.get("/api/shipments/:city", function (req, res) {
+    var beginCity = req.params.city;
+    db.shipment.findAll({
+      where: {
+        beginCity
+      }
+    }).then(function (dbShipment) {
+      res.json(dbShipment);
+    });
+  });
+
   // todo  Search a shipment by id
-  app.get("/api/shipments/:id", function (req, res) {
+  app.get("/api/shipments/id/:id", function (req, res) {
     var id = req.params.id;
     db.shipment.findOne({
       where: {
@@ -38,10 +50,11 @@ module.exports = function (app) {
 
   // !Working Create a new shipment
   app.post("/api/shipments", function (req, res) {
-    console.log("being sent:", req.body);
+    // console.log("being sent:", req.body);
     db.shipment.create({
         begin: req.body.begin,
         end: req.body.end,
+        beginCity: req.body.beginCity,
         item: req.body.item,
         details: req.body.details,
         price: req.body.price,

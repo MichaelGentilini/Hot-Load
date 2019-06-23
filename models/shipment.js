@@ -6,7 +6,11 @@ module.exports = function (sequelize, Datatypes) {
     beginCity: Datatypes.STRING,
     end: Datatypes.STRING,
     item: Datatypes.STRING,
-    details: Datatypes.TEXT,
+    details: {
+      type: Datatypes.TEXT,
+      defaultValue: "none provided",
+      comment: "nothing was entered here"
+    },
     price: Datatypes.FLOAT,
     miles: Datatypes.INTEGER,
     available: Datatypes.BOOLEAN
