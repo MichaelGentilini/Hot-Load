@@ -49,42 +49,41 @@
               <legend class="col-form-label col-sm-2 pt-0">Load Type</legend>
               <div class="col-sm-10">
 
-                <div class="form-check">
+                <div class="form-check form-check-inline ml-5">
                   <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="car" checked>
-                  <label class="form-check-label" for="gridRadios1">
+                  <label class="form-check-small" for="gridRadios1">
                     car
                   </label>
                 </div>
 
-                <div class="form-check">
+                <div class="form-check form-check-inline ml-5">
                   <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="truck">
                   <label class="form-check-label" for="gridRadios2">
                     truck
                   </label>
                 </div>
 
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3"
-                    value=" motorcycle/ATV">
+                <div class="form-check form-check-inline ml-5">
+                  <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value=" motorcycle">
                   <label class="form-check-label" for="gridRadios3">
-                    motorcycle/ATV
+                    motorcycle
                   </label>
                 </div>
 
-                <div class="form-check">
+                <div class="form-check form-check-inline ml-5">
                   <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios4" value="boat">
                   <label class="form-check-label" for="gridRadios4">
                     boat
                   </label>
                 </div>
 
-                <div class="form-check">
+                <div class="form-check form-check-inline ml-5">
                   <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios5" value="camper">
                   <label class="form-check-label" for="gridRadios5">
                     camper
                   </label>
                 </div>
-                <div class="form-check">
+                <div class="form-check form-check-inline ml-5">
                   <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios5" value="other">
                   <label class="form-check-label" for="gridRadios5">
                     other
@@ -111,13 +110,6 @@
 
         <div class="card text-center">
           <div class="card-header">Shipment information goes here or in a modal</div>
-          <ul>
-            {{#each shipments}}
-            {{#if available}}
-            <p>{{shipments}}</p>
-            {{/if}}
-            {{/each}}
-          </ul>
         </div>
 
       </div>
@@ -126,10 +118,7 @@
       <div role="tabpanel" class="tab-pane" id="carrier">
         <div class="card-header text-center mt-2">Carrier</div>
 
-        <div class="view-options mb-2 mt-3">
-          <button type="button" id="viewShipments" class="btn btn-success btn-block">View Available Loads</button>
-          <hr>
-        </div>
+
 
         <form>
           <div class="form-group row">
@@ -146,79 +135,64 @@
             </div>
           </div>
 
-          {{!-- ? not using this right now --}}
-          {{!-- <div class="form-group row mt-1">
-            <label for="carrierEnd" class="col-sm-2 col-form-label">Ending Address</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" id="carrierEnd" placeholder="123 Main Street, Dallas, TX">
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label for="carrierEndDistance" class="col-sm-2 col-form-label">Maximum Distance</label>
-            <div class="col-sm-10">
-              <input type="number" class="form-control" id="carrierEndDistance" placeholder="100">
-            </div>
-          </div> --}}
-
-          <div class="form-group row mt-1">
-            <label for="MinCarrierPrice" class="col-sm-2 col-form-label">Minimum Compensation per Mile</label>
-            <div class="col-sm-10">
-              <input type="number" class="form-control" id="MinCarrierPrice" placeholder="$0.20">
-            </div>
-          </div>
-
           <fieldset class="form-group">
-
             <div class="row">
               <legend class="col-form-label col-sm-2 pt-0">Load Type</legend>
               <div class="col-sm-10">
 
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="Radios" id="Radios1" value="car" checked>
+                <div class="form-check form-check-inline ml-5">
+                  <input class="form-check-input" type="radio" name="Radios" id="Radios1" value="car">
                   <label class="form-check-label" for="Radios1">
                     Car
                   </label>
                 </div>
 
-                <div class="form-check">
+                <div class="form-check form-check-inline ml-5">
                   <input class="form-check-input" type="radio" name="Radios" id="Radios2" value="truck">
                   <label class="form-check-label" for="Radios2">
                     Truck
                   </label>
                 </div>
 
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="Radios" id="Radios3" value="motorcycle/ATV">
+                <div class="form-check form-check-inline ml-5">
+                  <input class="form-check-input" type="radio" name="Radios" id="Radios3" value="motorcycle">
                   <label class="form-check-label" for="Radios3">
-                    Motorcycle/ATV
+                    Motorcycle
                   </label>
                 </div>
 
-                <div class="form-check">
+                <div class="form-check form-check-inline ml-5">
                   <input class="form-check-input" type="radio" name="Radios" id="Radios4" value="boat">
                   <label class="form-check-label" for="Radios4">
                     Boat
-                  </label>
+                    </h>
                 </div>
 
-                <div class="form-check">
+                <div class="form-check form-check-inline ml-5">
                   <input class="form-check-input" type="radio" name="Radios" id="Radios5" value="camper">
                   <label class="form-check-label" for="Radios5">
                     Camper
-                  </label>
+                    </h>
                 </div>
 
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="Radios" id="Radios6" value="author">
-                  <label class="form-check-label" for="Radios6">
+                <div class="form-check form-check-inline ml-5">
+                  <input class="form-check-input" type="radio" name="Radios" id="Radios6" value="other">
+                  <h class="form-check-label" for="Radios6">
                     Other
-                  </label>
+                  </h>
                 </div>
 
               </div>
             </div>
           </fieldset>
+
+          {{!--   for future development --}}
+          {{!-- <div class="form-group row mt-1">
+            <label for="MinCarrierPrice" class="col-sm-2 col-form-label">Minimum Compensation per Mile</label>
+            <div class="col-sm-10">
+              <input type="number" class="form-control" id="MinCarrierPrice" placeholder="$0.20">
+            </div>
+          </div> --}}
 
           <div class="form-group row">
             <div class="col">
@@ -227,8 +201,16 @@
           </div>
         </form>
 
-        <div class="card">
-          <div class="card-header">Available Routes Go here</div>
+
+        <hr>
+        <h5 class="text-center">OR</h5>
+        {{!-- <hr> --}}
+        <div class="view-options mb-2 mt-3">
+          <button type="button" id="viewShipments" class="btn btn-success btn-block">View All Loads</button>
+          <hr>
+
+
+          {{!-- <div class="card-header">Available Routes Go here</div> --}}
         </div>
       </div>
 

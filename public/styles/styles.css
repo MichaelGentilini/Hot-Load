@@ -1,3 +1,12 @@
 .list-group-item {
   line-height: 2.5;
 }
+
+.radios {
+  width: 100%;
+  border: 1px solid #ced4da;
+  line-height: 23px;
+  border-width: 1.5px;
+  border-radius: 2%;
+  text-align: center;
+}

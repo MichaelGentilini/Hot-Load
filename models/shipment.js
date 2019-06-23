@@ -11,8 +11,14 @@ module.exports = function (sequelize, Datatypes) {
       defaultValue: "none provided",
       comment: "nothing was entered here"
     },
-    price: Datatypes.FLOAT,
-    miles: Datatypes.INTEGER,
+    price: {
+      type: Datatypes.FLOAT,
+      defaultValue: 0
+    },
+    miles: {
+      type: Datatypes.INTEGER,
+      defaultValue: 0
+    },
     available: Datatypes.BOOLEAN
   });
   return Shipment;

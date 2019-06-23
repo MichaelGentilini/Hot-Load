@@ -1,6 +1,7 @@
 var db = require("../models");
 var axios = require("axios");
 
+
 // !Working Get request for distances from Google - Done
 module.exports = function (app) {
   // Get all shipments
@@ -24,33 +25,61 @@ module.exports = function (app) {
     });
   });
 
-  // todo  Search for shipments by city
+  // @working  Search for shipments by city
   app.get("/api/shipments/:city", function (req, res) {
     var beginCity = req.params.city;
     db.shipment.findAll({
       where: {
-        beginCity
-      }
+        beginCity,
+      },
+      // limit: 25
     }).then(function (dbShipment) {
       res.json(dbShipment);
     });
   });
 
-  // todo  Search a shipment by id
-  app.get("/api/shipments/id/:id", function (req, res) {
-    var id = req.params.id;
-    db.shipment.findOne({
+  // @ Search for shipments by city including item
+  app.get("/api/shipments/:city/:item", function (req, res) {
+    var beginCity = req.params.city;
+    var item = req.params.item;
+
+    db.shipment.findAll({
+      limit: 10,
       where: {
-        id
+        beginCity,
+        item
       }
     }).then(function (dbShipment) {
       res.json(dbShipment);
     });
   });
 
-  // !Working Create a new shipment
+  // @ Search for shipments by city including item
+  app.get("/api/shipments/:city/:item/:distance", function (req, res) {
+    var beginCity = req.params.city;
+    var item = req.params.item;
+    var miles = req.params.distance
+
+    db.shipment.findAll({
+      limit: 10,
+      where: {
+        beginCity,
+        item,
+        miles
+
+
+      }
+    }).then(function (dbShipment) {
+      res.json(dbShipment);
+    });
+  });
+
+
+  // @ Create a new shipment
   app.post("/api/shipments", function (req, res) {
     // console.log("being sent:", req.body);
+    console.log("here's the details", req.body.details);
+
     db.shipment.create({
         begin: req.body.begin,
         end: req.body.end,

@@ -1,26 +1,8 @@
-// ! view all Shipments
-$("#viewShipments").on("click", function () {
-  $.get("/api/shipments", function (data) {
-    console.table(data);
-  });
-
-  // todo  Search a shipment by id
-  $.get("/api/shipments/id/" + 30, function (data) {
-    if (data !== null) {
-
-      console.log(data);
-
-    } else {
-      console.log('unable to find this shipment')
-    }
-  });
-});
-
 // todo find a way to display the data for the user assigned to Manny
 
-// ! clear data function 
 var presetValue = "car";
 
+// @ clear data for shipper
 function clearShipmentData() {
   $("#shipperBegin").val(null),
     $("#shipperEnd").val(null),
@@ -28,32 +10,23 @@ function clearShipmentData() {
     $("input[name='gridRadios']").filter("[value='" + presetValue + "']").prop("checked", true),
     $("#shipperDetail").val(null);
 };
-
-function clearCarrierData() {
-  $("#carrierBegin").val(null),
-    $("#carrierBeginDistance").val(null),
-    $("input[name='Radios']").filter("[value='" + presetValue + "']").prop("checked", true),
-    $("#MinCarrierPrice").val(null)
-};
-
-// ! Event Listener for Shipper Info
+// @ Event Listener for Shipper Info
 $("#shipperSubmit").on("click", function (e) {
   e.preventDefault();
-  var beginCity = "";
+  var shipBeginCity = "";
   var shipBegin = $("#shipperBegin").val();
   var shipEnd = $("#shipperEnd").val();
   var shipPrice = $("#shipperPrice").val();
   var shipItem = $("input[name='gridRadios']:checked").val();
   var shipDetail = $("#shipperDetail").val();
-
   var shipBegin2 = shipBegin.split(', ');
 
+  // @ get the city from the address input
   function getCity() {
     for (key in shipBegin2) {
       var city = shipBegin2.length - 3;
       if (+key === city) {
-        console.log('the city is ', shipBegin2[key]);
-        beginCity = shipBegin2[key];
+        shipBeginCity = shipBegin2[key];
       };
     };
   };
@@ -78,13 +51,11 @@ $("#shipperSubmit").on("click", function (e) {
       "please enter a begining address, ending address, and compensation");
   }
 
-  // todo we need to catch anything that doesn't work like an out of country address or invalid data
-
+  // @ function(s) to create the shipment object
   function createShipment(distance) {
-
     addShipment({
       begin: shipBegin,
-      beginCity: beginCity,
+      beginCity: shipBeginCity,
       end: shipEnd,
       item: shipItem,
       details: shipDetail,
@@ -102,14 +73,22 @@ function addShipment(shipmentObj) {
     );
 }
 
-// ! Event Listener for Carrier Info
+// @ clear data for carrier 
+function clearCarrierData() {
+  $("#carrierBegin").val(null),
+    $("#carrierBeginDistance").val(null),
+    // $("input[name='Radios']").filter("[value='" + presetValue + "']").prop("checked", false),
+    $("input[name=Radios]").prop("checked", false),
+    $("#MinCarrierPrice").val(null)
+};
+
+// @Event Listener for Carrier Info
 $("#carrierSubmit").on("click", function (e) {
   e.preventDefault();
   var carBeginCity = "";
   var carBegin = $("#carrierBegin").val();
   var carBeginDistance = $("#carrierBeginDistance").val();
-  var carPrice = $("#MinCarrierPrice").val();
-
+  var carItem = $("input[name='Radios']:checked").val();
   var carBegin2 = carBegin.split(', ');
 
   function getCarCity() {
@@ -119,10 +98,20 @@ $("#carrierSubmit").on("click", function (e) {
         carBeginCity = carBegin2[key];
       }
     }
-    console.log('\n\t\t\t\t\t\t - - - - - -  searching for shipments in', carBeginCity, ' ----');
-    citySearch(carBeginCity);
+
+    if (carItem == null && carBeginDistance == undefined) {
+      console.log('running citySearch')
+      citySearch(carBeginCity);
+    } else if (carBeginDistance !== undefined) {
+      console.log('running citySearchDistance')
+      citySearchDistance(carBeginCity);
+    } else if (carItem !== undefined && carBeginDistance == undefined) {
+      console.log('running citySearchItem')
+      citySearchItem(carBeginCity)
+    }
   }
 
+  // @Search for shipments by city
   function citySearch(carBeginCity) {
     try {
       $.get("/api/shipments/" + carBeginCity, function (data) {
@@ -137,28 +126,70 @@ $("#carrierSubmit").on("click", function (e) {
     }
   }
 
+  // ? Search for shipments by city with distance
+  function citySearchDistance(carBeginCity) {
+    var distance = carBeginDistance;
+    if (carItem == undefined) {
+      carItem = "car";
+    }
+
+    try {
+      $.get("/api/shipments/" + carBeginCity + "/" + carItem + "/" + distance, function (data) {
+        if (data == '') {
+          console.log('\n\t\t\t= = = = = = = = = = = No shipments with more than ' + distance + ' miles were found in', carBeginCity, '= = = = = = = = = = ');
+        }
+        console.table(data);
+      });
+    } catch (err) {
+      console.log(err);
+      console.log('nothing matches');
+    }
+  }
+
+  // @Search for shipments by city with Load Type
+  function citySearchItem(carBeginCity) {
+    var item = carItem;
+    try {
+      $.get("/api/shipments/" + carBeginCity + "/" + item, function (data) {
+        if (data == '') {
+          console.log('\n\t\t\t= = = = = = = = = = = No shipments for ' + item + 'were found in', carBeginCity, '= = = = = = = = = = ');
+        }
+        console.table(data);
+      });
+    } catch (err) {
+      console.log(err);
+      console.log('nothing matches');
+    }
+  }
 
   if (carBegin !== "") {
-    console.log("\nBeginning: \t", carBegin);
+    console.log("\n= = = = = = = = = = = = = Searching Parameters = = = = = = = = = = = = = ");
+    console.log("Beginning: \t", carBegin);
     if (carBeginDistance !== "") {
-      console.log("Min Dist: \t", carBeginDistance);
+      console.log("Min Dist: \t", carBeginDistance, "miles");
     } else {
       console.log("Min Dist: \t", "No distance in this search");
     }
-
-    if (carPrice !== "") {
-      console.log("Pay: \t\t", carPrice);
+    if (carBeginDistance !== "") {
+      console.log("Load Type: \t", carItem);
     } else {
-      console.log("Pay: \t\t", "Price doesn't matter");
+      console.log("Load Type: \t", "car will be used for this search");
     }
     getCarCity();
     clearCarrierData();
   } else {
-    "please enter a starting City"
+    console.log("please enter a starting City")
   }
 });
 
-// ! Google Maps autocomplete Address
+// ! view all Shipments 
+$("#viewShipments").on("click", function () {
+  $.get("/api/shipments", function (data) {
+    console.table(data);
+  });
+});
+
+// @ Google Maps autocomplete Address
 function init() {
   var shipBeginAuto = document.getElementById("shipperBegin");
   var shipEndAuto = document.getElementById("shipperEnd");
@@ -170,7 +201,7 @@ function init() {
 google.maps.event.addDomListener(window, "load", init);
 
 
-//  ! Get geocode data from user input 
+//  ? Get geocode data from user input 
 // ? we don't need this for basic functionality right now, but if we want to add search by state, zip, etc this will make it much easier 
 function getLatLng(userAddress) {
   axios
@@ -185,11 +216,11 @@ function getLatLng(userAddress) {
       var formattedAddress = res.formatted_address;
       var newUserLat = res.geometry.location.lat;
       var newUserLng = res.geometry.location.lng;
-      // console.table(formattedAddress, newUserLat, newUserLng);
+
     });
 }
 
-//  ! Use this for Distance
+//  @ Use this for Distance
 function getDistance(Add1, Add2, shipPrice, createShipment) {
   axios.get(`/api/distance/${Add1}/${Add2}`)
 
