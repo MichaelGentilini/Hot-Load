@@ -19,9 +19,15 @@ module.exports = function (app) {
   app.get("/api/shipments", function (req, res) {
     var query = {};
     db.shipment.findAll({
-      where: query
-    }).then(function (dbShipment) {
-      res.json(dbShipment);
+      where: query,
+      limit: 10
+
+    }).then(function (db) {
+
+      res.json(db);
+
+    }).catch(function (err) {
+      console.log(err);
     });
   });
 
@@ -32,7 +38,8 @@ module.exports = function (app) {
       where: {
         beginCity,
       },
-      // limit: 25
+
+      // limit: 2
     }).then(function (dbShipment) {
       res.json(dbShipment);
     });
@@ -49,8 +56,8 @@ module.exports = function (app) {
         beginCity,
         item
       }
-    }).then(function (dbShipment) {
-      res.json(dbShipment);
+    }).then(function (db) {
+      res.json(db);
     });
   });
 
@@ -61,7 +68,7 @@ module.exports = function (app) {
     var miles = req.params.distance
 
     db.shipment.findAll({
-      limit: 10,
+      limit: 5,
       where: {
         beginCity,
         item,
@@ -77,8 +84,6 @@ module.exports = function (app) {
 
   // @ Create a new shipment
   app.post("/api/shipments", function (req, res) {
-    // console.log("being sent:", req.body);
-    console.log("here's the details", req.body.details);
 
     db.shipment.create({
         begin: req.body.begin,
@@ -97,27 +102,32 @@ module.exports = function (app) {
       });
   });
 
-  // todo Delete an Shipment by id
+  // @ this works in Postman ---  Delete a shipment by id
   app.delete("/api/shipments/:id", function (req, res) {
     db.shipment.destroy({
       where: {
         id: req.params.id
       }
-    }).then(function (
-      dbShipment
-    ) {
+    }).then(function (dbShipment) {
+      console.log('shipment deleted');
       res.json(dbShipment);
     });
   });
 
-  // todo Modify an existing shipment
-  app.put("/api/shipments", function (req, res) {
+  // todo Modify an existing shipment - change to available = false
+  app.put("/api/shipments:id", function (req, res) {
+    console.log(req.body);
     db.shipment.update(req.body, {
         where: {
-          id: req.body.id
+          id: req.params.id
         }
       })
       .then(function (dbShipment) {
+        if (dbShipment) {
+          console.log(dbShipment)
+        } else {
+          console.log('no data')
+        }
         res.json(dbShipment);
       });
   });

@@ -17,12 +17,11 @@
 
   <div class="container">
     <div class="tab-content">
-
       <div role="tabpanel" class="tab-pane active" id="shipper">
-
         <div class="card-header text-center mt-2">Add Shipment</div>
-        <form>
 
+
+        <form>
           <div class="form-group row">
             <label for="shipperBegin" class="col-sm-2 col-form-label">Beginning Address</label>
             <div class="col-sm-10">
@@ -113,13 +112,11 @@
         </div>
 
       </div>
+
       {{!-- Carrier Info --}}
 
       <div role="tabpanel" class="tab-pane" id="carrier">
         <div class="card-header text-center mt-2">Carrier</div>
-
-
-
         <form>
           <div class="form-group row">
             <label for="carrierBegin" class="col-sm-2 col-form-label">Beginning Address</label>
@@ -200,29 +197,51 @@
             </div>
           </div>
         </form>
-
-
         <hr>
+
         <h5 class="text-center">OR</h5>
-        {{!-- <hr> --}}
+        <hr>
         <div class="view-options mb-2 mt-3">
           <button type="button" id="viewShipments" class="btn btn-success btn-block">View All Loads</button>
           <hr>
 
+          <div class="card">
+            <div class="card-header text-center">
+              <h4>
+                Available Routes
+              </h4>
+            </div>
 
-          {{!-- <div class="card-header">Available Routes Go here</div> --}}
+            {{!-- ? can't figure this out --}}
+
+            <div id="results">
+              {{#each shipments}}
+              <ul>
+                <li>
+                  {{#if available}}
+                  {{!-- {{ shipment}} --}}
+                  {{!-- <div id="5"> </div> --}}
+                  {{this.begin}}
+                  {{/if}}
+                  {{/each}}
+
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
+    </div>
+  </div>
+  <script>
+    $('#shipper a').on('click', function (e) {
+      e.preventDefault()
+      $(this).tab('show')
+    });
 
-      <script>
-        $('#shipper a').on('click', function (e) {
-          e.preventDefault()
-          $(this).tab('show')
-        });
-
-        $('#carrier a').on('click', function (e) {
-          e.preventDefault()
-          $(this).tab('show')
-        });
-      </script>
+    $('#carrier a').on('click', function (e) {
+      e.preventDefault()
+      $(this).tab('show')
+    });
+  </script>
 </body>

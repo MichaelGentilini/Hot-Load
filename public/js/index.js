@@ -99,15 +99,20 @@ $("#carrierSubmit").on("click", function (e) {
       }
     }
 
-    if (carItem == null && carBeginDistance == undefined) {
+    console.log('carItem data:', carItem, carItem === undefined, carItem === '');
+    console.log('carBeginDistance data:', carBeginDistance, carBeginDistance === undefined, carBeginDistance === '');
+
+    if (carBeginDistance === '' & !carItem) {
       console.log('running citySearch')
       citySearch(carBeginCity);
-    } else if (carBeginDistance !== undefined) {
+    } else if (carBeginDistance !== "") {
       console.log('running citySearchDistance')
       citySearchDistance(carBeginCity);
-    } else if (carItem !== undefined && carBeginDistance == undefined) {
+    } else if (carItem !== "" && carBeginDistance === "") {
       console.log('running citySearchItem')
       citySearchItem(carBeginCity)
+    } else {
+      console.log('no search ran');
     }
   }
 
@@ -136,7 +141,7 @@ $("#carrierSubmit").on("click", function (e) {
     try {
       $.get("/api/shipments/" + carBeginCity + "/" + carItem + "/" + distance, function (data) {
         if (data == '') {
-          console.log('\n\t\t\t= = = = = = = = = = = No shipments with more than ' + distance + ' miles were found in', carBeginCity, '= = = = = = = = = = ');
+          console.log('\n\t\t\t= = = = = = = = = = = No shipments with more than ' + distance + ' miles were found leaving', carBeginCity, '= = = = = = = = = = ');
         }
         console.table(data);
       });
@@ -152,7 +157,7 @@ $("#carrierSubmit").on("click", function (e) {
     try {
       $.get("/api/shipments/" + carBeginCity + "/" + item, function (data) {
         if (data == '') {
-          console.log('\n\t\t\t= = = = = = = = = = = No shipments for ' + item + 'were found in', carBeginCity, '= = = = = = = = = = ');
+          console.log('\n\t\t\t= = = = = = = = = = = No shipments for ' + item + ' were found leaving', carBeginCity, '= = = = = = = = = = ');
         }
         console.table(data);
       });
@@ -186,10 +191,33 @@ $("#carrierSubmit").on("click", function (e) {
 $("#viewShipments").on("click", function () {
   $.get("/api/shipments", function (data) {
     console.table(data);
+
+    console.log("there are ", data.length, "shipments")
+    data.slice(-5).forEach(load => {
+      if (load.details === "") {
+        load.details = "no details provided"
+      }
+      var $shipbtn = $("<button shipmentId=" + load.id + "> ");
+      $shipbtn.addClass("btn btn-block btn-outline-info ml-2 mt-2 mb-2 text-left");
+      $shipbtn.html(
+        "From:&nbsp;&nbsp;&nbsp;&nbsp;" +
+        load.begin +
+        "<br>" + "To:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
+        load.end +
+        "<br>" + "Type:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
+        load.item +
+        // "<br>" + "Details:&nbsp;" +
+        // load.details +
+        "<br>" + "Pay:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $" +
+        load.price * load.miles +
+        "<br>"
+      );
+      $shipbtn.appendTo("#results");
+    });
   });
 });
 
-// @ Google Maps autocomplete Address
+// @ using Google to autocomplete address
 function init() {
   var shipBeginAuto = document.getElementById("shipperBegin");
   var shipEndAuto = document.getElementById("shipperEnd");
@@ -200,25 +228,24 @@ function init() {
 }
 google.maps.event.addDomListener(window, "load", init);
 
-
 //  ? Get geocode data from user input 
 // ? we don't need this for basic functionality right now, but if we want to add search by state, zip, etc this will make it much easier 
-function getLatLng(userAddress) {
-  axios
-    .get("https://maps.googleapis.com/maps/api/geocode/json", {
-      params: {
-        address: userAddress,
-        key: "AIzaSyA2Z73bHqtsEJuas82kslWAoAegg5Rxrco"
-      }
-    })
-    .then(function (response) {
-      res = response.data.results[0];
-      var formattedAddress = res.formatted_address;
-      var newUserLat = res.geometry.location.lat;
-      var newUserLng = res.geometry.location.lng;
+// function getLatLng(userAddress) {
+//   axios
+//     .get("https://maps.googleapis.com/maps/api/geocode/json", {
+//       params: {
+//         address: userAddress,
+//         key: "AIzaSyA2Z73bHqtsEJuas82kslWAoAegg5Rxrco"
+//       }
+//     })
+//     .then(function (response) {
+//       res = response.data.results[0];
+//       var formattedAddress = res.formatted_address;
+//       var newUserLat = res.geometry.location.lat;
+//       var newUserLng = res.geometry.location.lng;
 
-    });
-}
+//     });
+// }
 
 //  @ Use this for Distance
 function getDistance(Add1, Add2, shipPrice, createShipment) {
@@ -239,6 +266,8 @@ function getDistance(Add1, Add2, shipPrice, createShipment) {
       }
 
       createShipment(distance);
+
+
     })
     .catch(function (err) {
       console.log('\n\t\t\t\t\t = = = = = = = = Unfortunately, we cannot ship to this area! = = = = = = = ');

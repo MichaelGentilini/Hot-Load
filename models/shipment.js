@@ -13,11 +13,11 @@ module.exports = function (sequelize, Datatypes) {
     },
     price: {
       type: Datatypes.FLOAT,
-      defaultValue: 0
+      // defaultValue: 0
     },
     miles: {
       type: Datatypes.INTEGER,
-      defaultValue: 0
+      // defaultValue: 0
     },
     available: Datatypes.BOOLEAN
   });
