@@ -49,7 +49,8 @@ $("#shipperSubmit").on("click", function (e) {
     clearShipmentData();
   } else {
     Swal.fire({
-      title: "please enter a begining address, ending address, and compensation",
+      type: 'warning',
+      text: "please enter a begining address, ending address, and compensation",
     });
   }
 
@@ -69,16 +70,13 @@ $("#shipperSubmit").on("click", function (e) {
 });
 
 function addShipment(shipmentObj) {
-  $.post("/api/shipments", shipmentObj).then(
-    console.log("Your shipment has been added")
-  );
+  $.post("/api/shipments", shipmentObj).then();
 }
 
 // @ clear data for carrier
 function clearCarrierData() {
   $("#carrierBegin").val(null),
     $("#carrierBeginDistance").val(null),
-    // $("input[name='Radios']").filter("[value='" + presetValue + "']").prop("checked", false),
     $("input[name=Radios]").prop("checked", false),
     $("#MinCarrierPrice").val(null);
 }
@@ -100,19 +98,6 @@ $("#carrierSubmit").on("click", function (e) {
       }
     }
 
-    console.log(
-      "carItem data:",
-      carItem,
-      carItem === undefined,
-      carItem === ""
-    );
-    console.log(
-      "carBeginDistance data:",
-      carBeginDistance,
-      carBeginDistance === undefined,
-      carBeginDistance === ""
-    );
-
     if ((carBeginDistance === "") & !carItem) {
       console.log("running citySearch");
       citySearch(carBeginCity);
@@ -132,13 +117,12 @@ $("#carrierSubmit").on("click", function (e) {
     try {
       $.get("/api/shipments/" + carBeginCity, function (data) {
         if (data == "") {
-          console.log(
-            "\n\t\t\t= = = = = = = = = = = No shipments were found in",
-            carBeginCity,
-            "= = = = = = = = = = "
-          );
+          Swal.fire({
+            type: 'warning',
+            html: "No loads were found which match your criteria"
+          });
         }
-        console.table(data);
+        showRoutes(data);
       });
     } catch (err) {
       console.log(err);
@@ -158,20 +142,17 @@ $("#carrierSubmit").on("click", function (e) {
         "/api/shipments/" + carBeginCity + "/" + carItem + "/" + distance,
         function (data) {
           if (data == "") {
-            console.log(
-              "\n\t\t\t= = = = = = = = = = = No shipments with more than " +
-              distance +
-              " miles were found leaving",
-              carBeginCity,
-              "= = = = = = = = = = "
-            );
+            Swal.fire({
+              type: 'warning',
+              html: "No load of " + carItem + "(s) with " + distance +
+                " miles were found leaving " + carBeginCity + "<br> Try a different search!"
+            });
           }
-          console.table(data);
+          showRoutes(data);
         }
       );
     } catch (err) {
       console.log(err);
-      console.log("nothing matches");
     }
   }
 
@@ -181,19 +162,21 @@ $("#carrierSubmit").on("click", function (e) {
     try {
       $.get("/api/shipments/" + carBeginCity + "/" + item, function (data) {
         if (data == "") {
-          console.log(
-            "\n\t\t\t= = = = = = = = = = = No shipments for " +
-            item +
-            " were found leaving",
-            carBeginCity,
-            "= = = = = = = = = = "
-          );
+          Swal.fire({
+            type: 'warning',
+            text: " No shipments for " +
+              item +
+              " were found"
+          });
         }
-        console.table(data);
+        showRoutes(data);
       });
     } catch (err) {
       console.log(err);
-      console.log("nothing matches");
+      Swal.fire({
+        type: 'error',
+        text: err
+      });
     }
   }
 
@@ -216,7 +199,7 @@ $("#carrierSubmit").on("click", function (e) {
     clearCarrierData();
   } else {
     Swal.fire({
-      title: " please enter a starting City",
+      text: " please enter a starting City",
     });
   }
 });
@@ -224,37 +207,69 @@ $("#carrierSubmit").on("click", function (e) {
 // ! view all Shipments
 $("#viewShipments").on("click", function () {
   $.get("/api/shipments", function (data) {
-    console.table(data);
-
     console.log("there are ", data.length, "shipments");
-    data.slice(-5).forEach(load => {
-      if (load.details === "") {
-        load.details = "no details provided";
-      }
-      var $shipbtn = $("<button shipmentId=" + load.id + "> ");
-      $shipbtn.addClass(
-        "btn btn-block btn-outline-info ml-2 mt-2 mb-2 text-left"
-      );
-      $shipbtn.html(
-        "From:&nbsp;&nbsp;&nbsp;&nbsp;" +
-        load.begin +
-        "<br>" +
-        "To:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
-        load.end +
-        "<br>" +
-        "Type:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
-        load.item +
-        // "<br>" + "Details:&nbsp;" +
-        // load.details +
-        "<br>" +
-        "Pay:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $" +
-        load.price * load.miles +
-        "<br>"
-      );
-      $shipbtn.appendTo("#results");
-    });
+    showRoutes(data);
   });
 });
+
+function showRoutes(data) {
+  $('#results').empty();
+  data.slice(-10).forEach(load => {
+    // console.log(load); // 
+
+    if (load.details === "") {
+      load.details = "no details provided";
+    }
+    var $shipbtn = $("<button Id=" + load.id + " value=" + load.beginCity + "> ");
+    $shipbtn.addClass(
+      "btn btn-block btn-outline-info ml-2 mt-2 mb-2 text-left routeBtn"
+    );
+    $shipbtn.html(
+      "From:&nbsp;&nbsp;&nbsp;&nbsp;" +
+      load.begin +
+      "<br>" +
+      "To:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
+      load.end +
+      "<br>" +
+      "Type:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
+      load.item +
+      "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pay:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $" +
+      load.price * load.miles +
+      "<br>"
+    );
+    $shipbtn.appendTo("#results");
+  });
+
+  //  @ Event listener for the route button
+  $(".routeBtn").on("click", function (e) {
+    e.preventDefault();
+    console.log(this)
+    console.log(this.id);
+    var swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false,
+    })
+
+    Swal.fire({
+        title: "Accept load?",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+      })
+      .then((result) => {
+        if (result.value) {
+          swalWithBootstrapButtons.fire({
+            type: 'success',
+            title: 'Load accepted.',
+            imageUrl: '/img/truck.jpg',
+          })
+        }
+      })
+  })
+}
 
 // @ using Google to autocomplete address
 function init() {
@@ -267,25 +282,6 @@ function init() {
 }
 google.maps.event.addDomListener(window, "load", init);
 
-//  ? Get geocode data from user input
-// ? we don't need this for basic functionality right now, but if we want to add search by state, zip, etc this will make it much easier
-// function getLatLng(userAddress) {
-//   axios
-//     .get("https://maps.googleapis.com/maps/api/geocode/json", {
-//       params: {
-//         address: userAddress,
-//         key: "AIzaSyA2Z73bHqtsEJuas82kslWAoAegg5Rxrco"
-//       }
-//     })
-//     .then(function (response) {
-//       res = response.data.results[0];
-//       var formattedAddress = res.formatted_address;
-//       var newUserLat = res.geometry.location.lat;
-//       var newUserLng = res.geometry.location.lng;
-
-//     });
-// }
-
 //  @ Use this for Distance
 function getDistance(Add1, Add2, shipPrice, createShipment) {
   axios
@@ -293,17 +289,12 @@ function getDistance(Add1, Add2, shipPrice, createShipment) {
 
     .then(function (response) {
       var duration = response.data.duration.text;
-      // console.log("Est. Time\t", duration);
-      // console.log("Distance \t", response.data.distance.text);
-
       var distance = response.data.distance.text
         .split(" ")[0]
         .replace(/\,/g, "");
 
       if (shipPrice) {
-        // console.log("Rate \t\t $" + shipPrice + " per mile");
         var finalCost = parseFloat(distance).toFixed(2) * shipPrice;
-        // console.log("Total Cost \t $" + finalCost.toFixed(2));
       }
 
       var swalWithBootstrapButtons = Swal.mixin({
@@ -322,38 +313,39 @@ function getDistance(Add1, Add2, shipPrice, createShipment) {
           "<strong>Est. Time:</strong>\t" +
           duration +
           "<br/>" +
-          "<strong>Total Cost:</strong> \t $" +
+          "<strong>Rate:</strong> \t $" +
           shipPrice +
           "<br/>" +
-          "<strong>Rate</strong>\t" +
+          "<strong>Total Cost:</strong>\t" +
           finalCost.toFixed(2),
         showCancelButton: true,
         confirmButtonText: "Create Shipment",
         cancelButtonText: "No Thanks",
       }).then((result) => {
         if (result.value) {
-          swalWithBootstrapButtons.fire(
-            'Success, Your shipment has been created.',
-            createShipment(distance),
-          )
+          swalWithBootstrapButtons.fire({
+            type: 'success',
+            title: 'Your shipment has been created.',
+            imageUrl: '/img/truck.jpg',
+          })
+          createShipment(distance)
         } else if (
-          // Read more about handling dismissals
           result.dismiss === Swal.DismissReason.cancel
         ) {
-          swalWithBootstrapButtons.fire(
-            'Cancelled',
-            'Your shipment was not created!',
-            'error'
-          )
+          swalWithBootstrapButtons.fire({
+            type: 'error',
+            title: 'Cancelled',
+            text: 'Your shipment was not created!'
+
+          })
         }
       })
     })
     .catch(function (err) {
       Swal.fire({
-        title: " Unfortunately, we cannot ship to this area! ",
+        type: 'warning',
+        text: "Sorry, we don't have amphibious trucks ... Yet! ",
+        imageUrl: '/img/amphibious.jpg',
       });
-      // console.log(
-      //   "\n\t\t\t\t\t = = = = = = = = Unfortunately, we cannot ship to this area! = = = = = = = "
-      // );
     });
 }

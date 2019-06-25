@@ -1,11 +1,13 @@
 var db = require("../models");
 var axios = require("axios");
-// var { Op } = require("sequelize");
+var {
+  Op
+} = require("sequelize");
 
 // !Working Get request for distances from Google - Done
-module.exports = function(app) {
+module.exports = function (app) {
   // Get all shipments
-  app.get("/api/distance/:from/:to", function(req, res) {
+  app.get("/api/distance/:from/:to", function (req, res) {
     var from = req.params.from;
     var to = req.params.to;
     var key = "AIzaSyB2W892gFksiHUVpB-RmF0vPmV0ExdiOJM";
@@ -16,23 +18,23 @@ module.exports = function(app) {
   });
 
   // todo  show all shipments
-  app.get("/api/shipments", function(req, res) {
+  app.get("/api/shipments", function (req, res) {
     var query = {};
     db.shipment
       .findAll({
         where: query,
         limit: 25,
       })
-      .then(function(db) {
+      .then(function (db) {
         res.json(db);
       })
-      .catch(function(err) {
+      .catch(function (err) {
         console.log(err);
       });
   });
 
   // @working  Search for shipments by city
-  app.get("/api/shipments/:city", function(req, res) {
+  app.get("/api/shipments/:city", function (req, res) {
     var beginCity = req.params.city;
     db.shipment
       .findAll({
@@ -42,13 +44,13 @@ module.exports = function(app) {
 
         // limit: 2
       })
-      .then(function(dbShipment) {
+      .then(function (dbShipment) {
         res.json(dbShipment);
       });
   });
 
   // @ Search for shipments by city including item
-  app.get("/api/shipments/:city/:item", function(req, res) {
+  app.get("/api/shipments/:city/:item", function (req, res) {
     var beginCity = req.params.city;
     var item = req.params.item;
 
@@ -60,13 +62,13 @@ module.exports = function(app) {
           item,
         },
       })
-      .then(function(db) {
+      .then(function (db) {
         res.json(db);
       });
   });
 
   // @ Search for shipments by city including item
-  app.get("/api/shipments/:city/:item/:distance", function(req, res) {
+  app.get("/api/shipments/:city/:item/:distance", function (req, res) {
     var beginCity = req.params.city;
     var item = req.params.item;
     var miles = req.params.distance;
@@ -78,18 +80,20 @@ module.exports = function(app) {
           beginCity,
           item,
           miles: {
-            $gt: 1,
+            [Op.gte]: miles
           },
         },
-        order: [["miles", "DESC"]],
+        order: [
+          ["miles", "DESC"]
+        ],
       })
-      .then(function(dbShipment) {
+      .then(function (dbShipment) {
         res.json(dbShipment);
       });
   });
 
   // @ Create a new shipment
-  app.post("/api/shipments", function(req, res) {
+  app.post("/api/shipments", function (req, res) {
     db.shipment
       .create({
         begin: req.body.begin,
@@ -101,7 +105,7 @@ module.exports = function(app) {
         miles: req.body.miles,
         available: true,
       })
-      .then(function(dbShipment) {
+      .then(function (dbShipment) {
         console.log("Shipment added to database");
         console.log(dbShipment.dataValues);
         res.json(dbShipment);
@@ -109,21 +113,21 @@ module.exports = function(app) {
   });
 
   // @ this works in Postman ---  Delete a shipment by id
-  app.delete("/api/shipments/:id", function(req, res) {
+  app.delete("/api/shipments/:id", function (req, res) {
     db.shipment
       .destroy({
         where: {
           id: req.params.id,
         },
       })
-      .then(function(dbShipment) {
+      .then(function (dbShipment) {
         console.log("shipment deleted");
         res.json(dbShipment);
       });
   });
 
   // todo Modify an existing shipment - change to available = false
-  app.put("/api/shipments:id", function(req, res) {
+  app.put("/api/shipments:id", function (req, res) {
     console.log(req.body);
     db.shipment
       .update(req.body, {
@@ -131,7 +135,7 @@ module.exports = function(app) {
           id: req.params.id,
         },
       })
-      .then(function(dbShipment) {
+      .then(function (dbShipment) {
         if (dbShipment) {
           console.log(dbShipment);
         } else {
