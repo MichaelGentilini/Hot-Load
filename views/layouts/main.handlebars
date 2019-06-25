@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
   <link rel="stylesheet" type="text/css" href="/styles/styles.css">
+
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"
     integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -19,6 +20,9 @@
   <script type="text/javascript"
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2Z73bHqtsEJuas82kslWAoAegg5Rxrco&libraries=places"></script>
 
+  {{!-- <script src="sweet-modal/dist/min/jquery.sweet-modal.min.js"></script> --}}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+  {{!-- <link rel="stylesheet" href="sweet-modal/dist/min/jquery.sweet-modal.min.css" /> --}}
   <title>Welcome to Hot Load</title>
 </head>
 
@@ -46,6 +50,9 @@
 
   <div class="container">
     <div class="jumbotron text-center pt-5" style="background-image: url('/img/truck.jpg'); background-size: cover">
+      <video autoplay muted loop id="myVideo">
+        {{!-- <source src="/img/truck.mp4"  type="video/mp4"> --}}
+      </video>
       <h2 class="text-center">
       </h2>
       <h1 class="display-3" style="color: white; font-weight: 700">Hot Load</h1>
