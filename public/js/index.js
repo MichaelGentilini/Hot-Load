@@ -293,36 +293,18 @@ function getDistance(Add1, Add2, shipPrice, createShipment) {
 
     .then(function (response) {
       var duration = response.data.duration.text;
-      console.log("Est. Time\t", duration);
-      console.log("Distance \t", response.data.distance.text);
+      // console.log("Est. Time\t", duration);
+      // console.log("Distance \t", response.data.distance.text);
 
       var distance = response.data.distance.text
         .split(" ")[0]
         .replace(/\,/g, "");
 
       if (shipPrice) {
-        console.log("Rate \t\t $" + shipPrice + " per mile");
+        // console.log("Rate \t\t $" + shipPrice + " per mile");
         var finalCost = parseFloat(distance).toFixed(2) * shipPrice;
-        console.log("Total Cost \t $" + finalCost.toFixed(2));
-
-        //   Swal.fire({
-        //     title: "details",
-        //     html:
-        //       "<strong>Distance</strong> \t" +
-        //       response.data.distance.text +
-        //       "<br/><br/>" +
-        //       "<strong>Est. Time:</strong>\t" +
-        //       duration +
-        //       "<br/><br/>" +
-        //       "<strong>Total Cost:</strong> \t $" +
-        //       finalCost.toFixed(2),
-        //     // type: 'error',
-        //     confirmButtonText: "Accept",
-        //     cancelButtonText: "Cancel",
-        // });
+        // console.log("Total Cost \t $" + finalCost.toFixed(2));
       }
-
-
 
       var swalWithBootstrapButtons = Swal.mixin({
         customClass: {
@@ -360,7 +342,7 @@ function getDistance(Add1, Add2, shipPrice, createShipment) {
         ) {
           swalWithBootstrapButtons.fire(
             'Cancelled',
-            'No shipment created :)',
+            'Your shipment was not created!',
             'error'
           )
         }
