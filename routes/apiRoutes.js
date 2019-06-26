@@ -4,12 +4,17 @@ var {
   Op
 } = require("sequelize");
 
+
+
 // @ Get - request for distances from Google
 module.exports = function (app) {
   app.get("/api/distance/:from/:to", function (req, res) {
     var from = req.params.from;
     var to = req.params.to;
-    var key = "AIzaSyB2W892gFksiHUVpB-RmF0vPmV0ExdiOJM";
+    var key = process.env.GOOGLE_KEY;
+
+    console.log(process.env);
+
     var url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${from}&destinations=${to}&mode=driving&key=${key}`;
     axios.get(url).then(response => {
       res.json(response.data.rows[0].elements[0]);

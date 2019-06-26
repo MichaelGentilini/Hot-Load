@@ -1,4 +1,6 @@
 require("dotenv").config();
+
+
 var express = require("express");
 var exphbs = require("express-handlebars");
 
@@ -43,8 +45,8 @@ db.sequelize.sync(syncOptions).then(function () {
     console.log(
       "\n🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.",
       PORT,
-      PORT
-    );
+      PORT);
+    // console.log(process.env.GOOGLE_KEY)
   });
 });
 
