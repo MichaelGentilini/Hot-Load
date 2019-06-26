@@ -4,9 +4,8 @@ var {
   Op
 } = require("sequelize");
 
-// !Working Get request for distances from Google - Done
+// @ Get - request for distances from Google
 module.exports = function (app) {
-  // Get all shipments
   app.get("/api/distance/:from/:to", function (req, res) {
     var from = req.params.from;
     var to = req.params.to;
@@ -17,7 +16,7 @@ module.exports = function (app) {
     });
   });
 
-  // todo  show all shipments
+  // @ Get - show all shipments
   app.get("/api/shipments", function (req, res) {
     var query = {};
     db.shipment
@@ -33,7 +32,7 @@ module.exports = function (app) {
       });
   });
 
-  // @working  Search for shipments by city
+  // @Get - Search for shipments by city
   app.get("/api/shipments/:city", function (req, res) {
     var beginCity = req.params.city;
     db.shipment
@@ -41,15 +40,13 @@ module.exports = function (app) {
         where: {
           beginCity,
         },
-
-        // limit: 2
       })
       .then(function (dbShipment) {
         res.json(dbShipment);
       });
   });
 
-  // @ Search for shipments by city including item
+  // @ Get - Search for shipments by city including item
   app.get("/api/shipments/:city/:item", function (req, res) {
     var beginCity = req.params.city;
     var item = req.params.item;
@@ -67,7 +64,7 @@ module.exports = function (app) {
       });
   });
 
-  // @ Search for shipments by city including item
+  // @ Get - Search for shipments by city including item and distance
   app.get("/api/shipments/:city/:item/:distance", function (req, res) {
     var beginCity = req.params.city;
     var item = req.params.item;
@@ -75,7 +72,6 @@ module.exports = function (app) {
 
     db.shipment
       .findAll({
-        // limit: 5,
         where: {
           beginCity,
           item,
@@ -92,7 +88,7 @@ module.exports = function (app) {
       });
   });
 
-  // @ Create a new shipment
+  // @ Get - Create a new shipment
   app.post("/api/shipments", function (req, res) {
     db.shipment
       .create({
@@ -106,13 +102,12 @@ module.exports = function (app) {
         available: true,
       })
       .then(function (dbShipment) {
-        console.log("Shipment added to database");
-        console.log(dbShipment.dataValues);
+        console.log("\nShipment added to database\n");
         res.json(dbShipment);
       });
   });
 
-  // @ this works in Postman ---  Delete a shipment by id
+  // @ Delete a shipment by id
   app.delete("/api/shipments/:id", function (req, res) {
     db.shipment
       .destroy({
@@ -121,14 +116,13 @@ module.exports = function (app) {
         },
       })
       .then(function (dbShipment) {
-        console.log("shipment deleted");
+        console.log("\nShipment deleted\n");
         res.json(dbShipment);
       });
   });
 
-  // todo Modify an existing shipment - change to available = false
+  // todo for later dev --- Modify an existing shipment - change to available = false
   app.put("/api/shipments:id", function (req, res) {
-    console.log(req.body);
     db.shipment
       .update(req.body, {
         where: {

@@ -1,7 +1,4 @@
-// todo find a way to display the data for the user assigned to Manny
-
 var presetValue = "car";
-
 // @ clear data for shipper
 function clearShipmentData() {
   $("#shipperBegin").val(null),
@@ -37,20 +34,12 @@ $("#shipperSubmit").on("click", function (e) {
     getCity();
 
     shipPrice = Math.abs(parseFloat(shipPrice).toFixed(2));
-    console.log("\n" + "From:\t\t", $("#shipperBegin").val());
-    console.log("To: \t\t", $("#shipperEnd").val());
-    console.log("Shipping \t", shipItem);
-    if (shipDetail !== "") {
-      console.log("Details \t", shipDetail);
-    } else {
-      console.log("Details \t", "No details provided");
-    }
     getDistance(shipBegin, shipEnd, shipPrice, createShipment);
     clearShipmentData();
   } else {
     Swal.fire({
-      type: 'warning',
-      text: "please enter a begining address, ending address, and compensation",
+      type: "warning",
+      text: "please enter a begining address, ending address, and compensation"
     });
   }
 
@@ -64,7 +53,7 @@ $("#shipperSubmit").on("click", function (e) {
       details: shipDetail,
       price: shipPrice,
       miles: distance,
-      available: true,
+      available: true
     });
   }
 });
@@ -98,17 +87,13 @@ $("#carrierSubmit").on("click", function (e) {
       }
     }
 
+    // @ Carrier Search Functions
     if ((carBeginDistance === "") & !carItem) {
-      console.log("running citySearch");
       citySearch(carBeginCity);
     } else if (carBeginDistance !== "") {
-      console.log("running citySearchDistance");
       citySearchDistance(carBeginCity);
     } else if (carItem !== "" && carBeginDistance === "") {
-      console.log("running citySearchItem");
       citySearchItem(carBeginCity);
-    } else {
-      console.log("no search ran");
     }
   }
 
@@ -118,15 +103,17 @@ $("#carrierSubmit").on("click", function (e) {
       $.get("/api/shipments/" + carBeginCity, function (data) {
         if (data == "") {
           Swal.fire({
-            type: 'warning',
+            type: "warning",
             html: "No loads were found which match your criteria"
           });
         }
         showRoutes(data);
       });
     } catch (err) {
-      console.log(err);
-      console.log("nothing matches");
+      Swal.fire({
+        type: "warning",
+        html: "No loads were found which match your criteria"
+      });
     }
   }
 
@@ -143,16 +130,21 @@ $("#carrierSubmit").on("click", function (e) {
         function (data) {
           if (data == "") {
             Swal.fire({
-              type: 'warning',
-              html: "No load of " + carItem + "(s) with " + distance +
-                " miles were found leaving " + carBeginCity + "<br> Try a different search!"
+              type: "warning",
+              html: "No load with " +
+                distance +
+                " miles were found leaving " +
+                carBeginCity
             });
           }
           showRoutes(data);
         }
       );
     } catch (err) {
-      console.log(err);
+      Swal.fire({
+        type: "error",
+        text: err
+      });
     }
   }
 
@@ -163,43 +155,29 @@ $("#carrierSubmit").on("click", function (e) {
       $.get("/api/shipments/" + carBeginCity + "/" + item, function (data) {
         if (data == "") {
           Swal.fire({
-            type: 'warning',
-            text: " No shipments for " +
-              item +
-              " were found"
+            type: "warning",
+            text: " No shipments for " + item + " were found"
           });
+        } else {
+          showRoutes(data);
         }
-        showRoutes(data);
+
       });
     } catch (err) {
-      console.log(err);
       Swal.fire({
-        type: 'error',
+        type: "error",
         text: err
       });
     }
   }
 
+  // @ Run once there's an address entered on the carrier page
   if (carBegin !== "") {
-    console.log(
-      "\n= = = = = = = = = = = = = Searching Parameters = = = = = = = = = = = = = "
-    );
-    console.log("Beginning: \t", carBegin);
-    if (carBeginDistance !== "") {
-      console.log("Min Dist: \t", carBeginDistance, "miles");
-    } else {
-      console.log("Min Dist: \t", "No distance in this search");
-    }
-    if (carBeginDistance !== "") {
-      console.log("Load Type: \t", carItem);
-    } else {
-      console.log("Load Type: \t", "car will be used for this search");
-    }
     getCarCity();
     clearCarrierData();
   } else {
     Swal.fire({
-      text: " please enter a starting City",
+      text: " please enter a starting City"
     });
   }
 });
@@ -207,20 +185,20 @@ $("#carrierSubmit").on("click", function (e) {
 // ! view all Shipments
 $("#viewShipments").on("click", function () {
   $.get("/api/shipments", function (data) {
-    console.log("there are ", data.length, "shipments");
     showRoutes(data);
   });
 });
 
 function showRoutes(data) {
-  $('#results').empty();
+  $("#results").empty();
   data.slice(-10).forEach(load => {
-    // console.log(load); // 
-
     if (load.details === "") {
       load.details = "no details provided";
     }
-    var $shipbtn = $("<button Id=" + load.id + " value=" + load.beginCity + "> ");
+    //! dynamic buttons with JQuery
+    var $shipbtn = $(
+      "<button Id=" + load.id + " value=" + load.beginCity + "> "
+    );
     $shipbtn.addClass(
       "btn btn-block btn-outline-info ml-2 mt-2 mb-2 text-left routeBtn"
     );
@@ -230,12 +208,9 @@ function showRoutes(data) {
       "<br>" +
       "To:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
       load.end +
-      "<br>" +
-      "Type:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
-      load.item +
-      "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pay:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $" +
-      load.price * load.miles +
-      "<br>"
+      "<br>Distance: " +
+      load.miles + " miles &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Compensation: $" +
+      load.price * load.miles + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Load Type: " + load.item
     );
     $shipbtn.appendTo("#results");
   });
@@ -243,32 +218,39 @@ function showRoutes(data) {
   //  @ Event listener for the route button
   $(".routeBtn").on("click", function (e) {
     e.preventDefault();
-    console.log(this)
-    console.log(this.id);
-    var swalWithBootstrapButtons = Swal.mixin({
+    var id = this.id;
+    var swalBootstrapButtons = Swal.mixin({
       customClass: {
-        confirmButton: 'btn btn-success',
-        cancelButton: 'btn btn-danger'
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger"
       },
-      buttonsStyling: false,
-    })
+      buttonsStyling: false
+    });
 
     Swal.fire({
-        title: "Accept load?",
-        showCancelButton: true,
-        confirmButtonText: "Yes",
-        cancelButtonText: "No",
-      })
-      .then((result) => {
-        if (result.value) {
-          swalWithBootstrapButtons.fire({
-            type: 'success',
-            title: 'Load accepted.',
-            imageUrl: '/img/truck.jpg',
-          })
-        }
-      })
-  })
+      title: "Accept load?",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      cancelButtonText: "No"
+    }).then(result => {
+      if (result.value) {
+        swalBootstrapButtons.fire({
+          type: "success",
+          title: "Load accepted.",
+          imageUrl: "/img/truck.jpg"
+        });
+        // @ Delete Shipment
+        $.ajax("/api/shipments/" + id, {
+          type: "DELETE"
+        }).then(
+          function () {
+            setTimeout(function () {
+              location.reload();
+            }, 5000);
+          });
+      }
+    });
+  });
 }
 
 // @ using Google to autocomplete address
@@ -299,11 +281,11 @@ function getDistance(Add1, Add2, shipPrice, createShipment) {
 
       var swalWithBootstrapButtons = Swal.mixin({
         customClass: {
-          confirmButton: 'btn btn-success',
-          cancelButton: 'btn btn-danger'
+          confirmButton: "btn btn-success",
+          cancelButton: "btn btn-danger"
         },
-        buttonsStyling: false,
-      })
+        buttonsStyling: false
+      });
 
       Swal.fire({
         title: "Shipment Details",
@@ -314,38 +296,35 @@ function getDistance(Add1, Add2, shipPrice, createShipment) {
           duration +
           "<br/>" +
           "<strong>Rate:</strong> \t $" +
-          shipPrice +
-          "<br/>" +
-          "<strong>Total Cost:</strong>\t" +
+          shipPrice.toFixed(2) +
+          " per mile<br/>" +
+          "<strong>Total Cost:</strong>\t $" +
           finalCost.toFixed(2),
         showCancelButton: true,
         confirmButtonText: "Create Shipment",
-        cancelButtonText: "No Thanks",
-      }).then((result) => {
+        cancelButtonText: "No Thanks"
+      }).then(result => {
         if (result.value) {
           swalWithBootstrapButtons.fire({
-            type: 'success',
-            title: 'Your shipment has been created.',
-            imageUrl: '/img/truck.jpg',
-          })
-          createShipment(distance)
-        } else if (
-          result.dismiss === Swal.DismissReason.cancel
-        ) {
+            type: "success",
+            title: "Your shipment has been created.",
+            imageUrl: "/img/truck.jpg"
+          });
+          createShipment(distance);
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
           swalWithBootstrapButtons.fire({
-            type: 'error',
-            title: 'Cancelled',
-            text: 'Your shipment was not created!'
-
-          })
+            type: "error",
+            title: "Cancelled",
+            text: "Your shipment was not created!"
+          });
         }
-      })
+      });
     })
     .catch(function (err) {
       Swal.fire({
-        type: 'warning',
-        text: "Sorry, we don't have amphibious trucks ... Yet! ",
-        imageUrl: '/img/amphibious.jpg',
+        type: "warning",
+        html: "Unable to schedule that shipment. <br> We don't have amphibious trucks ... Yet! ",
+        imageUrl: "/img/amphibious.jpg"
       });
     });
 }

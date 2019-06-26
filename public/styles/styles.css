@@ -2,6 +2,7 @@
   line-height: 2.5;
 }
 
+/* This makes the radios input box look similar to the other input boxes */
 .radios {
   width: 100%;
   border: 1px solid #ced4da;

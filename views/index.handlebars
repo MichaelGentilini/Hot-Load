@@ -63,7 +63,7 @@
                 </div>
 
                 <div class="form-check form-check-inline ml-5">
-                  <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value=" motorcycle">
+                  <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="motorcycle">
                   <label class="form-check-label" for="gridRadios3">
                     motorcycle
                   </label>
@@ -207,22 +207,8 @@
             </h4>
           </div>
 
-          {{!-- ? can't figure this out --}}
+          <div id="results"></div>
 
-          <div id="results">
-            {{#each shipments}}
-            <ul>
-              <li>
-                {{#if available}}
-                {{!-- {{ shipment}} --}}
-                {{!-- <div id="5"> </div> --}}
-                {{this.begin}}
-                {{/if}}
-                {{/each}}
-
-              </li>
-            </ul>
-          </div>
         </div>
       </div>
     </div>
