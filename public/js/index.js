@@ -210,7 +210,7 @@ function showRoutes(data) {
       load.end +
       "<br>Distance: " +
       load.miles + " miles &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Compensation: $" +
-      load.price * load.miles + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Load Type: " + load.item
+      (load.price * load.miles).toFixed(2) + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Load Type: " + load.item
     );
     $shipbtn.appendTo("#results");
   });
