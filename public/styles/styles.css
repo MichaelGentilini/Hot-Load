@@ -12,13 +12,12 @@
   text-align: center;
 }
 
-.section {
-  height: 90vh;
+section {
+  min-height: 90vh;
 }
 
 /* sticky footer */
 footer {
-  position: absolute;
   bottom: 0;
   width: 100%;
   text-align: center;
