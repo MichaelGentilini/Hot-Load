@@ -88,7 +88,7 @@ module.exports = function (app) {
       });
   });
 
-  // @ Get - Create a new shipment
+  // @ Post - Create a new shipment
   app.post("/api/shipments", function (req, res) {
     db.shipment
       .create({
